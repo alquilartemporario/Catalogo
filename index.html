@@ -52,16 +52,34 @@ h2{ font-size:3.2em; color:#cbd5e1; }
     box-sizing:border-box;
 }
 
-/* Tarjetas de departamentos */
+/* Carrusel full-width */
+.carousel-container {
+    display:flex;
+    overflow-x:auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    gap:20px;
+    padding-bottom:10px;
+    margin-bottom:30px;
+}
+.carousel-container::-webkit-scrollbar {
+    height:12px;
+}
+.carousel-container::-webkit-scrollbar-thumb {
+    background:#6366f1;
+    border-radius:6px;
+}
+
+/* Tarjetas de departamentos full-width */
 .list-item{
+    flex:0 0 100%; /* ocupa todo el ancho */
     display:flex;
     flex-direction:column;
     background:linear-gradient(145deg,#1e293b,#1b263a);
     border-radius:25px;
-    padding:20px;
-    margin-bottom:25px;
+    padding:25px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-    width:100%;
+    scroll-snap-align: start;
     transition: transform 0.3s, box-shadow 0.3s, border 0.3s;
     cursor:default;
 }
@@ -78,6 +96,7 @@ h2{ font-size:3.2em; color:#cbd5e1; }
     border-radius:20px;
     cursor:pointer;
     transition: transform 0.3s;
+    margin-bottom:15px;
 }
 .list-item img:hover{ transform: scale(1.02); }
 
@@ -89,23 +108,23 @@ h2{ font-size:3.2em; color:#cbd5e1; }
     align-items:flex-start;
 }
 .list-item .info .barrio{
-    font-size:1.8em;
+    font-size:3.6em; 
     font-weight:bold;
     font-family: 'Georgia', serif;
     text-transform:uppercase;
-    margin:5px 0 10px 0;
-    color:#facc15; /* amarillo para resaltar */
+    margin:10px 0;
+    color:#facc15;
     text-align:left;
     width:100%;
 }
 .list-item .info .direccion{
-    font-size:1.5em;
+    font-size:3em; 
     font-weight:bold;
-    margin:0 0 5px 0;
+    margin:0 0 10px 0;
 }
 .list-item .info .detalles{
-    font-size:1.3em;
-    margin:0 0 15px 0;
+    font-size:2.6em; 
+    margin:0 0 20px 0;
     color:#e0e0e0;
 }
 
@@ -118,7 +137,7 @@ h2{ font-size:3.2em; color:#cbd5e1; }
     margin-top:auto;
 }
 .btn{
-    padding:12px 18px;
+    padding:14px 20px;
     border:none;
     border-radius:16px;
     cursor:pointer;
@@ -235,7 +254,7 @@ form input, form select{
 @media(max-width:600px){
     h1,h2{ font-size:2.2em; }
     .list-item .info .barrio,.list-item .info .direccion,.list-item .info .detalles{
-        font-size:1.2em;
+        font-size:1.8em;
     }
     form, #requisitos{ padding:40px 20px; font-size:2.2em; }
     #filtroAmbientes{ font-size:2.2em; padding:16px; }
@@ -254,7 +273,7 @@ form input, form select{
     </select>
 </div>
 
-<div id="contenedor"></div>
+<div class="carousel-container" id="contenedor"></div>
 
 <div id="requisitos">
     <h2>Requisitos</h2>
@@ -298,6 +317,7 @@ form input, form select{
 </div>
 
 <script>
+// CSV y funciones iguales que antes
 const csvURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vQ2E7ECUfY-ps4Ok0_1TJxTR1UPoYl-_ZYkGNlvhk9eZWHBslhsWtoCiTaPfCjQJ38kojq9pJBeoGep/pub?output=csv";
 let departamentos = [];
 let departamentoSeleccionado = null;
