@@ -73,10 +73,10 @@ h2{ font-size:3.2em; color:#cbd5e1; }
 }
 .list-item:hover{ transform: translateY(-4px); }
 
+/* Foto 25% del ancho */
 .list-item img{
-    width:220px;
+    width:25%;
     height:auto;
-    max-height:280px;
     object-fit:cover;
     border-radius:20px;
     cursor:pointer;
@@ -143,7 +143,7 @@ h2{ font-size:3.2em; color:#cbd5e1; }
     display:flex;
     justify-content:flex-start;
     gap:20px;
-    flex-wrap:wrap;
+    flex-wrap:nowrap; /* todos en una sola fila */
     margin-top:15px;
 }
 .btn{
@@ -179,7 +179,14 @@ form, #requisitos{
     font-size:3em;
     transition: box-shadow 0.5s;
 }
-form.highlight{ box-shadow: 0 0 30px 6px #6366f1; }
+form.highlight{ 
+    box-shadow: 0 0 30px 6px #6366f1; 
+    animation: parpadeo 1s ease-in-out 3; 
+}
+@keyframes parpadeo {
+    0%,100%{ box-shadow: 0 0 30px 6px #6366f1; }
+    50%{ box-shadow: 0 0 30px 6px #ffffff; }
+}
 
 form label{
     display:block;
@@ -394,12 +401,13 @@ function mostrarDepartamentos(lista){
 
 function seleccionarDepartamento(direccion,vendedor,btn){
     const mensajeSeleccion = document.getElementById("mensajeSeleccion");
+    const form = document.getElementById("consultaForm");
 
     if(departamentoSeleccionado === direccion){
         departamentoSeleccionado = null;
         btn.closest(".list-item").classList.remove("selected");
         document.getElementById("requisitos").style.display = "none";
-        document.getElementById("consultaForm").style.display = "none";
+        form.style.display = "none";
         mensajeSeleccion.style.display = "block";
         return;
     }
@@ -413,14 +421,17 @@ function seleccionarDepartamento(direccion,vendedor,btn){
 
     document.getElementById("requisitos").style.display = "block";
     document.getElementById("requisitos").scrollIntoView({behavior:"smooth"});
-    document.getElementById("consultaForm").style.display = "none";
+    form.style.display = "none";
 
     mensajeSeleccion.style.display = "none";
 }
 
 function aceptarRequisitos(){
-    document.getElementById("consultaForm").style.display = "block";
-    document.getElementById("consultaForm").scrollIntoView({behavior:"smooth"});
+    const form = document.getElementById("consultaForm");
+    form.style.display = "block";
+    form.scrollIntoView({behavior:"smooth"});
+    form.classList.add("highlight");
+    setTimeout(()=> form.classList.remove("highlight"), 3500);
 }
 
 function verEnMaps(direccion){
