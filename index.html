@@ -158,28 +158,54 @@ h2{ font-size:3.2em; color:#cbd5e1; }
 .btn-fotos{ background: linear-gradient(90deg,#f59e0b,#d97706); color:white; }
 .btn-consulta{ background: linear-gradient(90deg,#6366f1,#4f46e5); color:white; }
 
-/* Formulario siempre visible pero gris */
+/* Botón consulta seleccionado verde con tilde */
+.btn-consulta.selected{
+    background:#16a34a;
+    color:white;
+}
+.btn-consulta.selected::after{
+    content:" ✓";
+    margin-left:8px;
+}
+
+/* Formulario siempre invisible hasta tocar consulta */
 form{
-    margin-top:40px;
-    background:linear-gradient(145deg,#1e293b,#1b263a);
-    padding:60px 40px;
+    margin-top:20px;
+    background:#1b1f2b;
+    padding:40px;
     border-radius:25px;
     width:95%;
     max-width:95vw;
     box-sizing:border-box;
     text-align:center;
-    margin-left:auto;
-    margin-right:auto;
     box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-    font-size:3em;
-    opacity:0.5;
+    font-size:2em;
+    opacity:0.6;
     pointer-events:none;
-    transition: all 0.5s;
+    position:relative;
 }
 form.enabled{
     opacity:1;
     pointer-events:auto;
 }
+form .overlay{
+    position:absolute;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: rgba(0,0,0,0.6);
+    color:#f87171;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:1.8em;
+    font-weight:bold;
+    text-align:center;
+    border-radius:25px;
+    pointer-events:none;
+    z-index:2;
+}
+form.enabled .overlay{ display:none; }
+
 form label{
     display:block;
     margin-bottom:12px;
@@ -188,9 +214,9 @@ form label{
 }
 form input, form select{
     width:100%;
-    padding:20px 22px;
-    margin-bottom:24px;
-    border-radius:16px;
+    padding:15px 20px;
+    margin-bottom:16px;
+    border-radius:12px;
     border:none;
     font-size:1em;
     text-align:center;
@@ -207,18 +233,11 @@ form input, form select{
     font-size:1.6em;
     color:#f0f0f0;
     background:linear-gradient(145deg,#1e293b,#1b263a);
-    padding:40px;
+    padding:30px;
     border-radius:25px;
-    margin-top:30px;
+    margin-top:20px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.4);
     transition: all 0.5s;
-    transform:translateY(-50px);
-    opacity:0;
-    position:relative;
-}
-#requisitos.show{
-    transform:translateY(0);
-    opacity:1;
 }
 #requisitos.highlight{
     animation: iluminar 1s ease-in-out 2;
@@ -228,17 +247,16 @@ form input, form select{
     50%{ box-shadow: 0 0 25px 5px #ffffff; }
 }
 #requisitos ul{ margin-left:25px; }
-#requisitos p{ margin-top:15px; font-size:1.3em; color:#a5b4fc; }
 #requisitos button{
     margin-top:20px;
     font-size:1.2em;
     cursor:pointer;
     border-radius:12px;
-    padding:12px 20px;
+    padding:10px 20px;
     font-weight:bold;
 }
 #requisitos button.accepted{
-    background:#6366f1;
+    background:#16a34a;
     color:white;
 }
 
@@ -311,7 +329,7 @@ form input, form select{
 
 <div id="contenedor"></div>
 
-<!-- Requisitos que aparecen al presionar Consulta -->
+<!-- Requisitos -->
 <div id="requisitos">
     <h2>Requisitos</h2>
     <ul>
@@ -324,9 +342,10 @@ form input, form select{
     <button id="btnAceptar" onclick="aceptarRequisitos()">✅ Estoy de acuerdo</button>
 </div>
 
-<!-- Formulario siempre visible -->
+<!-- Formulario -->
 <h2>Formulario de Consulta</h2>
 <form id="consultaForm">
+    <div class="overlay">📌 Leer y aceptar requisitos antes de completar</div>
     <input type="hidden" id="direccionForm">
     <input type="hidden" id="vendedorForm">
 
@@ -364,6 +383,7 @@ form input, form select{
 </div>
 
 <script>
+// CSV y departamentos
 const csvURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vQ2E7ECUfY-ps4Ok0_1TJxTR1UPoYl-_ZYkGNlvhk9eZWHBslhsWtoCiTaPfCjQJ38kojq9pJBeoGep/pub?output=csv";
 let departamentos = [];
 let departamentoSeleccionado = null;
@@ -380,6 +400,7 @@ Papa.parse(csvURL,{
     }
 });
 
+// Filtro
 function llenarFiltro(){
     const select = document.getElementById("filtroAmbientes");
     let ambientesSet = new Set(departamentos.map(d=>d["Ambientes"]).filter(Boolean));
@@ -395,6 +416,7 @@ function llenarFiltro(){
     });
 }
 
+// Mostrar tarjetas
 function mostrarDepartamentos(lista){
     const contenedor=document.getElementById("contenedor");
     contenedor.innerHTML="";
@@ -432,18 +454,22 @@ function mostrarDepartamentos(lista){
     });
 }
 
+// Seleccionar depto
 function seleccionarDepartamento(direccion,vendedor,btn){
     departamentoSeleccionado = direccion;
     document.querySelectorAll(".list-item").forEach(item => item.classList.remove("selected"));
     btn.closest(".list-item").classList.add("selected");
+
+    // Botón consulta verde con tilde
+    document.querySelectorAll(".btn-consulta").forEach(b=>b.classList.remove("selected"));
+    btn.classList.add("selected");
 
     document.getElementById("direccionForm").value = direccion;
     document.getElementById("vendedorForm").value = '+5491168686694';
 
     const req = document.getElementById("requisitos");
     req.style.display = "block";
-    req.classList.add("show","highlight");
-    req.scrollIntoView({behavior:"smooth"});
+    req.classList.add("highlight");
 
     const form = document.getElementById("consultaForm");
     form.classList.remove("enabled");
@@ -451,15 +477,19 @@ function seleccionarDepartamento(direccion,vendedor,btn){
     document.getElementById("mensajeSeleccion").style.display = "none";
 
     setTimeout(()=> req.classList.remove("highlight"), 2200);
+
+    // Scroll al formulario
+    form.scrollIntoView({behavior:"smooth"});
 }
 
+// Aceptar requisitos
 function aceptarRequisitos(){
     const form = document.getElementById("consultaForm");
     form.classList.add("enabled");
     document.getElementById("btnAceptar").classList.add("accepted");
-    form.scrollIntoView({behavior:"smooth"});
 }
 
+// Google Maps
 function verEnMaps(direccion){
     let url = `https://www.google.com/maps/search/${encodeURIComponent(direccion + ', Ciudad Autónoma de Buenos Aires')}`;
     window.open(url, "_blank");
@@ -480,8 +510,12 @@ function cerrarModal(){ document.getElementById("modal").style.display = "none";
 function prevFoto(){ if(fotoIndex>0){ fotoIndex--; document.getElementById("fotoModal").src=currentFotos[fotoIndex]; } }
 function nextFoto(){ if(fotoIndex<currentFotos.length-1){ fotoIndex++; document.getElementById("fotoModal").src=currentFotos[fotoIndex]; } }
 
+// Formulario envío
 document.getElementById("consultaForm").addEventListener("submit", function(e){
     e.preventDefault();
+    const form = document.getElementById("consultaForm");
+    if(!form.classList.contains("enabled")){ alert("📌 Debe leer y aceptar los requisitos antes de completar el formulario."); return; }
+
     const nombre = document.getElementById("nombreForm").value;
     const direccion = document.getElementById("direccionForm").value;
     const vendedor = document.getElementById("vendedorForm").value;
