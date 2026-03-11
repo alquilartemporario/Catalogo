@@ -370,7 +370,7 @@ form input, form select{
     <button type="submit" class="btn btn-whatsapp">💬 Enviar WhatsApp</button>
 </form>
 
-<div id="mensajeSeleccion">Seleccionar depto con el botón Consulta</div>
+<div id="mensajeSeleccion">Seleccionar depto con el botón Consulta + Requisitos</div>
 
 <!-- Modal fotos -->
 <div id="modal" class="modal">
@@ -420,7 +420,7 @@ function llenarFiltro(){
 function mostrarDepartamentos(lista){
     const contenedor=document.getElementById("contenedor");
     contenedor.innerHTML="";
-    lista.forEach((row,index)=>{
+    lista.forEach((row)=>{
         let fotosLinks = [];
         if(row["Fotos"]){
             fotosLinks = row["Fotos"].split(",").map(f=>f.trim()).map(link=>{
@@ -432,9 +432,8 @@ function mostrarDepartamentos(lista){
 
         let item = document.createElement("div");
         item.className="list-item";
-        if(departamentoSeleccionado===row["Dirección"]) item.classList.add("selected");
         item.innerHTML=`
-            <img src="${primera}" onclick="abrirModal(${index})">
+            <img src="${primera}" onclick='abrirModalDepartamento(${JSON.stringify(row)})'>
             <div class="info">
                 <h3>${row["Dirección"]} - <span class="ambientes">${row["Ambientes"]} amb</span></h3>
                 <p class="barrio">${row["Barrio"] || ""}</p>
@@ -443,8 +442,8 @@ function mostrarDepartamentos(lista){
                     <span class="incluye">Incluye: ${row["Incluye"] || "-"}</span>
                 </div>
                 <div class="btn-row">
-                    <button class="btn btn-fotos" onclick="abrirModal(${index})">📸 Ver Fotos</button>
-                    <button class="btn btn-consulta" onclick="seleccionarDepartamento('${row['Dirección']}','${row['Vendedor']}',this)">💼 Consulta</button>
+                    <button class="btn btn-fotos" onclick='abrirModalDepartamento(${JSON.stringify(row)})'>📸 Ver Fotos</button>
+                    <button class="btn btn-consulta" onclick="seleccionarDepartamento('${row['Dirección']}','${row['Vendedor']}',this)">💼 Consulta + Requisitos</button>
                     <button class="btn btn-maps" onclick="verEnMaps('${row['Dirección']}')">🗺️ Maps</button>
                 </div>
             </div>
@@ -460,7 +459,6 @@ function seleccionarDepartamento(direccion,vendedor,btn){
     document.querySelectorAll(".list-item").forEach(item => item.classList.remove("selected"));
     btn.closest(".list-item").classList.add("selected");
 
-    // Botón consulta verde con tilde
     document.querySelectorAll(".btn-consulta").forEach(b=>b.classList.remove("selected"));
     btn.classList.add("selected");
 
@@ -478,7 +476,6 @@ function seleccionarDepartamento(direccion,vendedor,btn){
 
     setTimeout(()=> req.classList.remove("highlight"), 2200);
 
-    // Scroll al formulario
     form.scrollIntoView({behavior:"smooth"});
 }
 
@@ -495,9 +492,9 @@ function verEnMaps(direccion){
     window.open(url, "_blank");
 }
 
-// Modal fotos
-function abrirModal(index){
-    currentFotos = departamentos[index].Fotos ? departamentos[index].Fotos.split(",").map(f=>f.trim()).map(link=>{
+// Modal fotos con depto específico
+function abrirModalDepartamento(depto){
+    currentFotos = depto.Fotos ? depto.Fotos.split(",").map(f=>f.trim()).map(link=>{
         let id = link.match(/[-\w]{25,}/);
         return id ? "https://lh3.googleusercontent.com/d/"+id[0] : null;
     }).filter(Boolean) : [];
@@ -516,17 +513,18 @@ document.getElementById("consultaForm").addEventListener("submit", function(e){
     const form = document.getElementById("consultaForm");
     if(!form.classList.contains("enabled")){ alert("📌 Debe leer y aceptar los requisitos antes de completar el formulario."); return; }
 
-    const nombre = document.getElementById("nombreForm").value;
-    const direccion = document.getElementById("direccionForm").value;
-    const vendedor = document.getElementById("vendedorForm").value;
-    const fecha = document.getElementById("fechaForm").value;
-    const tiempo = document.getElementById("tiempoForm").value;
-    const personas = document.getElementById("personasForm").value;
-    const mascotas = document.getElementById("mascotasForm").value;
+    let nombre = document.getElementById("nombreForm").value;
+    let fecha = document.getElementById("fechaForm").value;
+    let tiempo = document.getElementById("tiempoForm").value;
+    let personas = document.getElementById("personasForm").value;
+    let mascotas = document.getElementById("mascotasForm").value;
+    let direccion = document.getElementById("direccionForm").value;
+    let vendedor = document.getElementById("vendedorForm").value;
 
-    let mensaje = `Hola! Mi nombre es ${nombre}.\nEstoy interesado en el departamento "${direccion}".\nFecha de ingreso: ${fecha}\nTiempo de alquiler: ${tiempo} meses\nPersonas: ${personas}\nMascotas: ${mascotas}`;
-    window.open(`https://wa.me/${vendedor.replace(/\D/g,'')}?text=${encodeURIComponent(mensaje)}`, "_blank");
+    let mensaje = `Hola! Quiero consultar el depto en ${direccion}%0ANombre: ${nombre}%0AIngreso: ${fecha}%0ADuración: ${tiempo} meses%0APersonas: ${personas}%0AMascotas: ${mascotas}`;
+    window.open(`https://wa.me/${vendedor}?text=${mensaje}`,"_blank");
 });
 </script>
+
 </body>
 </html>
