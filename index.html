@@ -25,14 +25,25 @@ h2{ font-size:3.2em; color:#cbd5e1; }
 .list-item .info{ flex:1; margin-left:25px; display:flex; flex-direction:column; align-items:flex-start; }
 .list-item .info h3{ margin:0 0 5px 0; font-size:2em; color:#ffffff; }
 .list-item .info .ambientes{ display:inline-block; background:#6366f1; color:white; padding:4px 12px; border-radius:12px; font-weight:bold; font-size:1.2em; margin-left:6px; }
-.list-item .info .barrio{ font-size:2em; font-weight:bold; font-family:'Georgia',serif; text-transform:uppercase; margin:6px 0 8px 0; color:#3b82f6; text-align:left; width:100%; }
+.list-item .info .barrio{ font-size:4.4em; font-weight:bold; font-family:'Georgia',serif; text-transform:uppercase; margin:6px 0 8px 0; color:#3b82f6; text-align:left; width:100%; }
 .list-item .info .detalles{ display:flex; justify-content:space-between; align-items:center; font-size:1.3em; margin:8px 0; color:#e0e0e0; }
-.list-item .info .detalles .valor{ font-size:1.8em; font-weight:bold; color:#facc15; }
+.list-item .info .detalles .valor{ font-size:2.2em; font-weight:bold; color:#facc15; }
 .list-item .info .detalles .incluye{ font-style:italic; color:#d1d5db; font-size:1.4em; text-align:right; }
 
-/* Botones */
-.btn-row{ display:flex; justify-content:flex-start; gap:20px; flex-wrap:wrap; margin-top:15px; }
-.btn{ padding:12px 20px; border:none; border-radius:16px; cursor:pointer; font-weight:bold; display:inline-flex; align-items:center; gap:8px; font-size:1.2em; transition:0.3s; }
+.btn-row{ display:flex; justify-content:flex-start; gap:40px; flex-wrap:nowrap; margin-top:15px; }
+
+/* BOTONES MÁS GRANDES */
+.btn {
+    padding:48px 72px; /* doble de antes */
+    font-size:4.8em;   /* doble de antes */
+    border-radius:16px;
+    cursor: pointer;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    gap:24px; /* doble de antes */
+    transition: 0.3s;
+}
 .btn-whatsapp{ background: linear-gradient(90deg,#25D366,#1ebe57); color:white; }
 .btn-maps{ background: linear-gradient(90deg,#3b82f6,#2563eb); color:white; }
 .btn-fotos{ background: linear-gradient(90deg,#f59e0b,#d97706); color:white; }
@@ -41,29 +52,30 @@ h2{ font-size:3.2em; color:#cbd5e1; }
 .btn-consulta.selected::after{ content:" ✓"; margin-left:8px; }
 
 /* Formulario */
-form{ margin-top:20px; background:#1b1f2b; padding:40px; border-radius:25px; width:95%; max-width:95vw; box-sizing:border-box; text-align:center; box-shadow:0 10px 25px rgba(0,0,0,0.4); font-size:1em; opacity:0.6; pointer-events:none; position:relative; }
+form{ margin-top:20px; background:#1b1f2b; padding:40px; border-radius:25px; width:95%; max-width:95vw; box-sizing:border-box; text-align:center; box-shadow:0 10px 25px rgba(0,0,0,0.4); font-size:2em; opacity:0.6; pointer-events:none; position:relative; }
 form.enabled{ opacity:1; pointer-events:auto; }
-form .overlay{ position:absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); color:#f87171; display:flex; justify-content:center; align-items:center; font-size:1em; font-weight:bold; text-align:center; border-radius:25px; pointer-events:none; z-index:2; }
+form .overlay{ position:absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); color:#f87171; display:flex; justify-content:center; align-items:center; font-size:1.8em; font-weight:bold; text-align:center; border-radius:25px; pointer-events:none; z-index:2; }
 form.enabled .overlay{ display:none; }
 form label{ display:block; margin-bottom:12px; font-weight:bold; color:#cbd5e1; }
-form input, form select{ width:100%; padding:10px 15px; margin-bottom:16px; border-radius:12px; border:none; font-size:1em; text-align:center; background:#1f2937; color:white; box-sizing:border-box; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); }
+form input, form select{ width:100%; padding:15px 20px; margin-bottom:16px; border-radius:12px; border:none; font-size:1em; text-align:center; background:#1f2937; color:white; box-sizing:border-box; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); }
 
 /* Requisitos */
-#requisitos{ display:none; text-align:left; font-size:1em; color:#f0f0f0; background:linear-gradient(145deg,#1e293b,#1b263a); padding:20px; border-radius:25px; margin-top:20px; box-shadow:0 10px 25px rgba(0,0,0,0.4); transition: all 0.5s; }
+#requisitos{ display:none; text-align:left; font-size:1.6em; color:#f0f0f0; background:linear-gradient(145deg,#1e293b,#1b263a); padding:30px; border-radius:25px; margin-top:20px; box-shadow:0 10px 25px rgba(0,0,0,0.4); transition: all 0.5s; }
 #requisitos.highlight{ animation: iluminar 1s ease-in-out 2; }
-@keyframes iluminar{ 0%,100%{ box-shadow:0 0 25px 5px #6366f1; } 50%{ box-shadow:0 0 25px 5px #ffffff; } }
+@keyframes iluminar{ 0%,100{ box-shadow:0 0 25px 5px #6366f1; } 50%{ box-shadow:0 0 25px 5px #ffffff; } }
 #requisitos ul{ margin-left:25px; }
-#requisitos button{ margin-top:20px; font-size:1em; cursor:pointer; border-radius:12px; padding:10px 20px; font-weight:bold; }
+#requisitos button{ margin-top:20px; font-size:1.2em; cursor:pointer; border-radius:12px; padding:10px 20px; font-weight:bold; }
 #requisitos button.accepted{ background:#16a34a; color:white; }
 
 /* Modal fotos */
 .modal{ display:none; position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.95); justify-content:center; align-items:center; z-index:1000; overflow:hidden; }
-.modal .close-btn{ position:absolute; top:15px; right:20px; background:#f87171; color:white; font-size:2em; padding:10px 20px; border:none; border-radius:12px; cursor:pointer; }
+.modal .close-btn{ position:absolute; top:15px; right:20px; background:#f87171; color:white; font-size:3em; padding:15px 25px; border:none; border-radius:12px; cursor:pointer; }
 .modal .carrusel{ display:flex; justify-content:center; align-items:center; width:80%; max-width:1000px; height:70%; margin:auto; position:relative; }
 .modal .carrusel img{ max-width:100%; max-height:100%; object-fit:contain; border-radius:12px; }
-.modal .nav-btn{ position:absolute; top:50%; transform:translateY(-50%); background:#6366f1; border:none; color:white; font-size:2em; padding:12px 18px; border-radius:12px; cursor:pointer; }
+.modal .nav-btn{ position:absolute; top:50%; transform:translateY(-50%); background:#6366f1; border:none; color:white; font-size:3em; padding:20px 30px; border-radius:12px; cursor:pointer; }
 .modal .prev-btn{ left:-60px; }
 .modal .next-btn{ right:-60px; }
+
 </style>
 </head>
 <body>
@@ -129,6 +141,7 @@ Papa.parse(csvURL,{ download:true, header:true, complete:function(results){
     mostrarDepartamentos(departamentos);
 }});
 
+// Llenar filtro
 function llenarFiltro(){
     const select = document.getElementById("filtroAmbientes");
     let ambientesSet = new Set(departamentos.map(d=>d["Ambientes"]).filter(Boolean));
@@ -143,6 +156,7 @@ function llenarFiltro(){
     });
 }
 
+// Mostrar tarjetas
 function mostrarDepartamentos(lista){
     const contenedor=document.getElementById("contenedor");
     contenedor.innerHTML="";
@@ -178,7 +192,7 @@ function mostrarDepartamentos(lista){
     });
 }
 
-// Funciones resto (seleccionar, modal, WhatsApp) igual que antes
+// Funciones restantes (seleccionar depto, aceptar requisitos, modal fotos, enviar formulario)
 function seleccionarDepartamento(direccion,vendedor,btn){
     departamentoSeleccionado = direccion;
     document.querySelectorAll(".list-item").forEach(item => item.classList.remove("selected"));
