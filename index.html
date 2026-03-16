@@ -212,28 +212,26 @@ width:90%;
 text-align:left;
 }
 
-#bloqueRequisitos{
-font-size:1.8em;
-line-height:1.5;
-}
-
 #deptoTitulo{
 font-size:2.5em;
 }
 
 #deptoInfo{
-font-size:2em;
+font-size:1.8em;
 margin-bottom:10px;
 }
 
 .formBox input,
-.formBox select{
+.formBox select,
+.formBox textarea{
 width:100%;
 padding:12px;
 margin:8px 0;
 border-radius:10px;
 border:none;
 font-size:1.1em;
+background:#0f172a;
+color:white;
 }
 
 </style>
@@ -287,34 +285,42 @@ font-size:1.1em;
 
 <div id="deptoInfo"></div>
 
-<h3 style="font-size:2em">Requisitos</h3>
+<h3 style="font-size:2em;margin-top:20px">Requisitos para ingresar</h3>
 
 <div id="bloqueRequisitos">
 
-<ul>
+<ul style="list-style:none;padding:0;font-size:1.5em;line-height:1.6">
 
-<li>DNI o Pasaporte</li>
+<li>🪪 DNI o Pasaporte</li>
 
 <li>
-Demostración de ingresos
-<button onclick="toggleInfo()" style="border:none;border-radius:50%;width:30px;height:30px;background:#3b82f6;color:white">?</button>
+💼 Demostración de ingresos
+<button onclick="toggleInfo()" style="border:none;border-radius:50%;width:30px;height:30px;background:#3b82f6;color:white;margin-left:6px">?</button>
 
-<div id="infoIngresos" style="display:none;margin-top:6px;font-size:0.9em;color:#cbd5e1">
-La demostración de ingresos puede ser del inquilino o del responsable del pago.
+<div id="infoIngresos" style="display:none;margin-top:8px;font-size:0.9em;color:#cbd5e1">
+Puede ser del inquilino o del responsable del pago.
 </div>
 
 </li>
 
-<li>Mes de adelanto</li>
-<li>Mes de depósito</li>
-<li>Mes de honorarios</li>
+<li>💰 Mes de adelanto</li>
+<li>🔒 Mes de depósito</li>
+<li>📑 Mes de honorarios</li>
 
 </ul>
 
-<div id="totalIngreso" style="font-size:1.8em;color:#facc15;margin-top:10px"></div>
+<div style="background:#0f172a;padding:18px;border-radius:14px;margin-top:15px;text-align:center">
 
-<button onclick="aceptarRequisitos()" style="width:100%;padding:16px;border:none;border-radius:12px;background:#16a34a;color:white;font-size:1.2em;margin-top:15px">
-Aceptar requisitos y continuar
+<div style="font-size:1.2em;color:#94a3b8">
+Total estimado para ingresar
+</div>
+
+<div id="totalIngreso" style="font-size:2.2em;color:#facc15;margin-top:6px;font-weight:bold"></div>
+
+</div>
+
+<button onclick="aceptarRequisitos()" style="width:100%;padding:18px;border:none;border-radius:14px;background:#16a34a;color:white;font-size:1.4em;margin-top:20px">
+Entiendo los requisitos — continuar
 </button>
 
 </div>
@@ -323,13 +329,16 @@ Aceptar requisitos y continuar
 
 <h3 style="font-size:2em">Completa tus datos</h3>
 
-<input id="nombre" placeholder="Nombre">
+<input id="nombre" placeholder="Nombre completo">
 
-<input id="personas" type="number" placeholder="Cantidad de personas">
+<input id="telefono" placeholder="WhatsApp">
 
+<input id="personas" type="number" placeholder="¿Cuántas personas vivirán?">
+
+<label>Fecha estimada de ingreso</label>
 <input id="fecha" type="date">
 
-<input id="meses" type="number" placeholder="¿Por cuántos meses?">
+<input id="meses" type="number" placeholder="¿Cuántos meses planeas alquilar?">
 
 <select id="mascotas">
 <option value="">¿Mascotas?</option>
@@ -337,8 +346,10 @@ Aceptar requisitos y continuar
 <option>Sí</option>
 </select>
 
+<textarea id="comentario" placeholder="Comentario adicional"></textarea>
+
 <button onclick="enviarConsulta()" style="width:100%;padding:16px;border:none;border-radius:12px;background:#25D366;color:white;font-size:1.2em">
-Continuar por WhatsApp
+Enviar consulta por WhatsApp
 </button>
 
 </div>
@@ -495,7 +506,7 @@ let total=valor*3
 
 document.getElementById("deptoTitulo").innerText=row["Barrio"]+" • "+row["Ambientes"]+" ambientes"
 document.getElementById("deptoInfo").innerHTML=row["Dirección"]+"<br>Valor mensual: "+valor
-document.getElementById("totalIngreso").innerText="Total para ingresar: "+total
+document.getElementById("totalIngreso").innerText="USD "+total
 
 document.getElementById("modalConsulta").style.display="flex"
 
@@ -521,12 +532,28 @@ document.getElementById("modalConsulta").style.display="none"
 function enviarConsulta(){
 
 let nombre=document.getElementById("nombre").value
+let telefono=document.getElementById("telefono").value
 let personas=document.getElementById("personas").value
 let fecha=document.getElementById("fecha").value
 let meses=document.getElementById("meses").value
 let mascotas=document.getElementById("mascotas").value
+let comentario=document.getElementById("comentario").value
 
-let texto=`Hola! Soy ${nombre}. Consulto por el departamento en ${deptoActual["Dirección"]}, ${deptoActual["Barrio"]}. Somos ${personas} personas. Ingreso ${fecha} por ${meses} meses. Mascotas: ${mascotas}.`
+let texto=
+`Consulta departamento
+
+📍 ${deptoActual["Dirección"]}, ${deptoActual["Barrio"]}
+
+👤 Nombre: ${nombre}
+📞 WhatsApp: ${telefono}
+👥 Personas: ${personas}
+📅 Ingreso: ${fecha}
+⏳ Meses: ${meses}
+🐶 Mascotas: ${mascotas}
+
+📝 Comentario:
+${comentario}
+`
 
 window.open("https://wa.me/5491168686694?text="+encodeURIComponent(texto))
 
