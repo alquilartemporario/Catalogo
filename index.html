@@ -65,29 +65,26 @@ border:none;
 
 .list-item{
 display:flex;
-align-items:stretch;
 gap:15px;
-
 background:linear-gradient(145deg,#1e293b,#1b263a);
 border-radius:25px;
 padding:20px;
 margin-top:20px;
-
 box-shadow:0 10px 25px rgba(0,0,0,0.4);
-
 min-height:420px;
-height:auto;
 }
 
 .list-item img{
-width:432px;
-min-width:432px;
-
-height:auto;
-max-height:100%;
-
+width:420px;
+min-width:420px;
 object-fit:cover;
 border-radius:15px;
+cursor:pointer;
+transition:0.3s;
+}
+
+.list-item img:hover{
+transform:scale(1.02);
 }
 
 .info{
@@ -96,23 +93,22 @@ display:flex;
 flex-direction:column;
 justify-content:space-between;
 text-align:left;
-padding-bottom:10px;
 }
 
 .barrio{
-font-size:3.2em;
+font-size:3em;
 font-weight:bold;
 color:#3b82f6;
 }
 
 .ambientes{
-font-size:2.2em;
+font-size:2.4em;
 color:#94a3b8;
 margin-top:6px;
 }
 
 .direccion{
-font-size:2.2em;
+font-size:2.4em;
 margin-top:6px;
 }
 
@@ -124,7 +120,7 @@ margin-top:10px;
 }
 
 .incluye{
-font-size:2.1em;
+font-size:2em;
 color:#cbd5e1;
 margin-top:6px;
 }
@@ -171,37 +167,38 @@ z-index:1000;
 
 .closeModal{
 position:absolute;
-top:8px;
-right:10px;
+top:20px;
+right:20px;
 background:#ef4444;
 color:white;
 border:none;
 border-radius:50%;
 width:45px;
 height:45px;
-font-size:1.4em;
+font-size:1.5em;
 cursor:pointer;
 }
 
-.modal img{
-max-width:90vw;
-max-height:70vh;
+/* CAROUSEL */
+
+.carousel{
+display:flex;
+align-items:center;
+gap:20px;
+}
+
+.carousel img{
+max-width:75vw;
+max-height:75vh;
 border-radius:15px;
-object-fit:contain;
 }
 
-.nav{
-margin-top:20px;
-}
-
-.nav button{
-padding:12px 20px;
-font-size:1.4em;
+.navBtn{
+font-size:3em;
+background:none;
 border:none;
-border-radius:10px;
-background:#6366f1;
 color:white;
-margin:5px;
+cursor:pointer;
 }
 
 .noResultados{
@@ -212,25 +209,35 @@ color:#f87171;
 
 .formBox{
 background:#1e293b;
-padding:25px;
+padding:30px;
 border-radius:20px;
-max-width:1200px;
+max-width:900px;
 width:90%;
 text-align:left;
 }
 
 #bloqueRequisitos{
+font-size:1.8em;
+line-height:1.5;
+}
+
+#deptoTitulo{
+font-size:2.5em;
+}
+
+#deptoInfo{
 font-size:2em;
-line-height:1.4;
+margin-bottom:10px;
 }
 
 .formBox input,
 .formBox select{
 width:100%;
-padding:10px;
-margin:6px 0;
-border-radius:8px;
+padding:12px;
+margin:8px 0;
+border-radius:10px;
 border:none;
+font-size:1.1em;
 }
 
 </style>
@@ -260,11 +267,14 @@ border:none;
 
 <button class="closeModal" onclick="cerrarTodo()">✕</button>
 
+<div class="carousel">
+
+<button class="navBtn" onclick="prev()">◀</button>
+
 <div id="slide"></div>
 
-<div class="nav">
-<button onclick="prev()">◀</button>
-<button onclick="next()">▶</button>
+<button class="navBtn" onclick="next()">▶</button>
+
 </div>
 
 </div>
@@ -281,7 +291,7 @@ border:none;
 
 <div id="deptoInfo"></div>
 
-<h3>Requisitos</h3>
+<h3 style="font-size:2em">Requisitos</h3>
 
 <div id="bloqueRequisitos">
 
@@ -291,7 +301,7 @@ border:none;
 
 <li>
 Demostración de ingresos
-<button onclick="toggleInfo()" style="border:none;border-radius:50%;width:25px;height:25px;background:#3b82f6;color:white">?</button>
+<button onclick="toggleInfo()" style="border:none;border-radius:50%;width:30px;height:30px;background:#3b82f6;color:white">?</button>
 
 <div id="infoIngresos" style="display:none;margin-top:6px;font-size:0.9em;color:#cbd5e1">
 La demostración de ingresos se resuelve según cada caso,
@@ -307,13 +317,13 @@ del pago del alquiler.
 
 </ul>
 
-<div id="totalIngreso" style="font-size:1.4em;color:#facc15;margin-top:10px"></div>
+<div id="totalIngreso" style="font-size:1.8em;color:#facc15;margin-top:10px"></div>
 
 <div style="margin-top:10px">
 Reserva: Medio mes de alquiler (se descuenta del total a abonar el día de ingreso)
 </div>
 
-<button onclick="aceptarRequisitos()" style="width:100%;padding:14px;border:none;border-radius:12px;background:#16a34a;color:white;font-size:1.1em;margin-top:15px">
+<button onclick="aceptarRequisitos()" style="width:100%;padding:16px;border:none;border-radius:12px;background:#16a34a;color:white;font-size:1.2em;margin-top:15px">
 Aceptar requisitos y continuar
 </button>
 
@@ -321,15 +331,15 @@ Aceptar requisitos y continuar
 
 <div id="bloqueFormulario" style="display:none">
 
-<h3 style="margin-top:20px">Completa tus datos</h3>
+<h3 style="margin-top:20px;font-size:2em">Completa tus datos</h3>
 
 <input id="nombre" placeholder="Nombre">
 
-<input id="personas" type="number" inputmode="numeric" placeholder="Cantidad de personas">
+<input id="personas" type="number" placeholder="Cantidad de personas">
 
 <input id="fecha" type="date">
 
-<input id="meses" type="number" inputmode="numeric" placeholder="¿Por cuántos meses?">
+<input id="meses" type="number" placeholder="¿Por cuántos meses?">
 
 <select id="mascotas">
 <option value="">¿Mascotas?</option>
@@ -337,7 +347,7 @@ Aceptar requisitos y continuar
 <option>Sí</option>
 </select>
 
-<button onclick="enviarConsulta()" style="width:100%;padding:14px;border:none;border-radius:12px;background:#25D366;color:white;font-size:1.1em">
+<button onclick="enviarConsulta()" style="width:100%;padding:16px;border:none;border-radius:12px;background:#25D366;color:white;font-size:1.2em">
 Continuar por WhatsApp
 </button>
 
@@ -348,8 +358,6 @@ Continuar por WhatsApp
 </div>
 
 <script>
-
-/* TU JAVASCRIPT ORIGINAL SIN CAMBIOS */
 
 const csvURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vQ2E7ECUfY-ps4Ok0_1TJxTR1UPoYl-_ZYkGNlvhk9eZWHBslhsWtoCiTaPfCjQJ38kojq9pJBeoGep/pub?output=csv"
 
@@ -441,13 +449,6 @@ let resultados=departamentos
 .filter(d=>(!ambienteActivo || parseInt(d["Ambientes"])==ambienteActivo))
 .filter(d=>(!barrio || d["Barrio"]==barrio))
 
-if(resultados.length==0){
-
-lista.innerHTML='<div class="noResultados">⚠️ No hay departamentos con esos filtros</div>'
-return
-
-}
-
 resultados.forEach(row=>{
 
 let fotos=row["Fotos"].split(",").map(f=>{
@@ -461,7 +462,7 @@ card.className="list-item"
 
 card.innerHTML=`
 
-<img src="${fotos[0]}">
+<img src="${fotos[0]}" class="fotoCard">
 
 <div class="info">
 
@@ -487,87 +488,13 @@ card.innerHTML=`
 `
 
 card.querySelector(".btnFoto").onclick=()=>verFotos(row)
+card.querySelector(".fotoCard").onclick=()=>verFotos(row)
 card.querySelector(".btnMapa").onclick=()=>verMapa(row["Dirección"])
 card.querySelector(".btnWsp").onclick=()=>consultar(row)
 
 lista.appendChild(card)
 
 })
-
-}
-
-function consultar(row){
-
-deptoActual=row
-
-let valor=parseFloat(row["Valor"])
-let total=valor*3
-
-document.getElementById("deptoTitulo").innerText=row["Barrio"]+" • "+row["Ambientes"]+" ambientes"
-
-document.getElementById("deptoInfo").innerHTML=row["Dirección"]+"<br>Valor mensual: "+valor
-
-document.getElementById("totalIngreso").innerText="Total para el ingreso: "+total
-
-document.getElementById("modalConsulta").style.display="flex"
-
-document.getElementById("bloqueRequisitos").style.display="block"
-document.getElementById("bloqueFormulario").style.display="none"
-
-}
-
-function aceptarRequisitos(){
-
-document.getElementById("bloqueRequisitos").style.display="none"
-document.getElementById("bloqueFormulario").style.display="block"
-
-}
-
-function toggleInfo(){
-
-let t=document.getElementById("infoIngresos")
-t.style.display=t.style.display=="block"?"none":"block"
-
-}
-
-function cerrarConsulta(){
-
-document.getElementById("modalConsulta").style.display="none"
-
-}
-
-function formatearFecha(fechaISO){
-
-const meses=[
-"enero","febrero","marzo","abril","mayo","junio",
-"julio","agosto","septiembre","octubre","noviembre","diciembre"
-]
-
-let partes=fechaISO.split("-")
-
-let año=partes[0]
-let mes=meses[parseInt(partes[1])-1]
-let dia=partes[2]
-
-return `${dia} de ${mes} de ${año}`
-
-}
-
-function enviarConsulta(){
-
-let nombre=document.getElementById("nombre").value
-let personas=document.getElementById("personas").value
-let fecha=document.getElementById("fecha").value
-let meses=document.getElementById("meses").value
-let mascotas=document.getElementById("mascotas").value
-
-let fechaTexto=formatearFecha(fecha)
-
-let mascotasTexto = mascotas=="Sí" ? "tengo mascotas" : "no tengo mascotas"
-
-let texto=`Hola ! mi nombre es ${nombre}, quiero consultar sobre ${deptoActual["Ambientes"]} - ${deptoActual["Dirección"]} - en - ${deptoActual["Barrio"]}. Tengo que mudarme a partir del ${fechaTexto} en lo posible por ${meses} meses. Somos ${personas} y ${mascotasTexto}.`
-
-window.open("https://wa.me/5491168686694?text="+encodeURIComponent(texto))
 
 }
 
