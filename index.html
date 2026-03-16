@@ -28,6 +28,8 @@ width:92vw;
 margin:auto;
 }
 
+/* FILTROS */
+
 .sectionTitle{
 margin-top:25px;
 margin-bottom:10px;
@@ -61,7 +63,7 @@ color:white;
 border:none;
 }
 
-/* TARJETA */
+/* TARJETAS */
 
 .list-item{
 display:flex;
@@ -77,10 +79,10 @@ min-height:420px;
 .list-item img{
 width:420px;
 min-width:420px;
-object-fit:cover;
 border-radius:15px;
+object-fit:cover;
 cursor:pointer;
-transition:0.3s;
+transition:.3s;
 }
 
 .list-item img:hover{
@@ -129,7 +131,6 @@ margin-top:6px;
 
 .btnRow{
 display:flex;
-flex-wrap:wrap;
 gap:8px;
 margin-top:10px;
 }
@@ -161,7 +162,6 @@ background:rgba(0,0,0,0.95);
 justify-content:center;
 align-items:center;
 flex-direction:column;
-padding:20px;
 z-index:1000;
 }
 
@@ -179,7 +179,7 @@ font-size:1.5em;
 cursor:pointer;
 }
 
-/* CAROUSEL */
+/* CARRUSEL */
 
 .carousel{
 display:flex;
@@ -201,11 +201,7 @@ color:white;
 cursor:pointer;
 }
 
-.noResultados{
-margin-top:40px;
-font-size:1.2em;
-color:#f87171;
-}
+/* CONSULTA */
 
 .formBox{
 background:#1e293b;
@@ -265,7 +261,7 @@ font-size:1.1em;
 
 <div class="modal" id="modalFotos">
 
-<button class="closeModal" onclick="cerrarTodo()">✕</button>
+<button class="closeModal" onclick="cerrarFotos()">✕</button>
 
 <div class="carousel">
 
@@ -304,9 +300,7 @@ Demostración de ingresos
 <button onclick="toggleInfo()" style="border:none;border-radius:50%;width:30px;height:30px;background:#3b82f6;color:white">?</button>
 
 <div id="infoIngresos" style="display:none;margin-top:6px;font-size:0.9em;color:#cbd5e1">
-La demostración de ingresos se resuelve según cada caso,
-puede ser de los inquilinos o de las personas responsables
-del pago del alquiler.
+La demostración de ingresos puede ser del inquilino o del responsable del pago.
 </div>
 
 </li>
@@ -319,10 +313,6 @@ del pago del alquiler.
 
 <div id="totalIngreso" style="font-size:1.8em;color:#facc15;margin-top:10px"></div>
 
-<div style="margin-top:10px">
-Reserva: Medio mes de alquiler (se descuenta del total a abonar el día de ingreso)
-</div>
-
 <button onclick="aceptarRequisitos()" style="width:100%;padding:16px;border:none;border-radius:12px;background:#16a34a;color:white;font-size:1.2em;margin-top:15px">
 Aceptar requisitos y continuar
 </button>
@@ -331,7 +321,7 @@ Aceptar requisitos y continuar
 
 <div id="bloqueFormulario" style="display:none">
 
-<h3 style="margin-top:20px;font-size:2em">Completa tus datos</h3>
+<h3 style="font-size:2em">Completa tus datos</h3>
 
 <input id="nombre" placeholder="Nombre">
 
@@ -402,7 +392,6 @@ document.querySelectorAll("#ambientes .btnFiltro").forEach(btn=>btn.classList.re
 if(ambienteActivo){ b.classList.add("activo") }
 
 actualizarBarrios()
-
 filtrar()
 
 }
@@ -457,7 +446,6 @@ return "https://lh3.googleusercontent.com/d/"+id[0]
 })
 
 let card=document.createElement("div")
-
 card.className="list-item"
 
 card.innerHTML=`
@@ -487,8 +475,8 @@ card.innerHTML=`
 </div>
 `
 
-card.querySelector(".btnFoto").onclick=()=>verFotos(row)
 card.querySelector(".fotoCard").onclick=()=>verFotos(row)
+card.querySelector(".btnFoto").onclick=()=>verFotos(row)
 card.querySelector(".btnMapa").onclick=()=>verMapa(row["Dirección"])
 card.querySelector(".btnWsp").onclick=()=>consultar(row)
 
@@ -498,17 +486,59 @@ lista.appendChild(card)
 
 }
 
+function consultar(row){
+
+deptoActual=row
+
+let valor=parseFloat(row["Valor"])
+let total=valor*3
+
+document.getElementById("deptoTitulo").innerText=row["Barrio"]+" • "+row["Ambientes"]+" ambientes"
+document.getElementById("deptoInfo").innerHTML=row["Dirección"]+"<br>Valor mensual: "+valor
+document.getElementById("totalIngreso").innerText="Total para ingresar: "+total
+
+document.getElementById("modalConsulta").style.display="flex"
+
+document.getElementById("bloqueRequisitos").style.display="block"
+document.getElementById("bloqueFormulario").style.display="none"
+
+}
+
+function aceptarRequisitos(){
+document.getElementById("bloqueRequisitos").style.display="none"
+document.getElementById("bloqueFormulario").style.display="block"
+}
+
+function toggleInfo(){
+let t=document.getElementById("infoIngresos")
+t.style.display=t.style.display=="block"?"none":"block"
+}
+
+function cerrarConsulta(){
+document.getElementById("modalConsulta").style.display="none"
+}
+
+function enviarConsulta(){
+
+let nombre=document.getElementById("nombre").value
+let personas=document.getElementById("personas").value
+let fecha=document.getElementById("fecha").value
+let meses=document.getElementById("meses").value
+let mascotas=document.getElementById("mascotas").value
+
+let texto=`Hola! Soy ${nombre}. Consulto por el departamento en ${deptoActual["Dirección"]}, ${deptoActual["Barrio"]}. Somos ${personas} personas. Ingreso ${fecha} por ${meses} meses. Mascotas: ${mascotas}.`
+
+window.open("https://wa.me/5491168686694?text="+encodeURIComponent(texto))
+
+}
+
 function verFotos(row){
 
 slides=[]
 
 row["Fotos"].split(",").forEach(f=>{
 let id=f.match(/[-\w]{25,}/)
-
-slides.push({
-url:"https://lh3.googleusercontent.com/d/"+id[0]
-})
-
+slides.push("https://lh3.googleusercontent.com/d/"+id[0])
 })
 
 index=0
@@ -519,22 +549,23 @@ document.getElementById("modalFotos").style.display="flex"
 }
 
 function mostrarSlide(){
-
-let s=slides[index]
-
-document.getElementById("slide").innerHTML=`<img src="${s.url}">`
-
+document.getElementById("slide").innerHTML=`<img src="${slides[index]}">`
 }
 
-function next(){ if(index<slides.length-1){index++;mostrarSlide()} }
-function prev(){ if(index>0){index--;mostrarSlide()} }
+function next(){
+if(index<slides.length-1){index++;mostrarSlide()}
+}
+
+function prev(){
+if(index>0){index--;mostrarSlide()}
+}
+
+function cerrarFotos(){
+document.getElementById("modalFotos").style.display="none"
+}
 
 function verMapa(dir){
 window.open("https://www.google.com/maps/search/"+encodeURIComponent(dir+", Buenos Aires"))
-}
-
-function cerrarTodo(){
-document.getElementById("modalFotos").style.display="none"
 }
 
 </script>
