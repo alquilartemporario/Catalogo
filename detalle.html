@@ -25,6 +25,18 @@ font-weight:bold;
 color:#38bdf8;
 }
 
+.badgeBarrio{
+display:inline-flex;
+align-items:center;
+gap:10px;
+background:white;
+color:black;
+padding:10px 18px;
+border-radius:12px;
+font-size:0.4em;
+margin-top:10px;
+}
+
 .galeria{display:flex;overflow-x:auto;gap:12px;padding:20px;}
 .galeria img{height:400px;border-radius:12px;cursor:pointer;}
 
@@ -132,15 +144,6 @@ overflow:hidden;
 height:400px;
 }
 
-details{
-margin:12px;
-font-size:1.4em;
-background:#1e293b;
-padding:20px;
-border-radius:14px;
-cursor:pointer;
-}
-
 </style>
 </head>
 
@@ -150,10 +153,11 @@ cursor:pointer;
 
 <div class="hero">
 <div id="barrio" class="barrioGrande"></div>
+<div id="badgeBarrio" class="badgeBarrio"></div>
 </div>
 
 <div class="story">
-Si buscas mudarte de forma simple este departamento es ideal para vos
+✨ Tu próximo hogar temporal en Buenos Aires te está esperando 🏡
 </div>
 
 <div class="galeria" id="galeria"></div>
@@ -163,23 +167,18 @@ Si buscas mudarte de forma simple este departamento es ideal para vos
 <div id="direccion"></div>
 </div>
 
-<details>
-<summary><b>Ver descripción</b></summary>
-<div id="descripcion"></div>
-</details>
-
 <div class="box">
-<b>Valor:</b><br>
+<b>💰 Valor:</b><br>
 <div id="precio"></div>
 </div>
 
 <div class="box">
-<b>Incluye:</b><br>
+<b>📦 Incluye:</b><br>
 <div id="incluye"></div>
 </div>
 
 <div class="box">
-<b>Total a abonar el día de ingreso:</b><br>
+<b>🧾 Total a abonar el día de ingreso:</b><br>
 <div id="total"></div>
 </div>
 
@@ -188,10 +187,10 @@ Si buscas mudarte de forma simple este departamento es ideal para vos
 </div>
 
 <div class="pasos">
-<b>Mudarte es fácil:</b><br><br>
-Realizá tu consulta<br>
-Hablá con un asesor<br>
-Coordiná tu visita o reserva
+<b>🚀 Mudarte es fácil:</b><br><br>
+💬 Realizá tu consulta<br>
+🤝 Hablá con un asesor<br>
+🏡 Coordiná tu visita o reserva
 </div>
 
 </div>
@@ -243,9 +242,14 @@ return "https://lh3.googleusercontent.com/d/"+id[0]
 fotosGlobal=fotos
 
 document.getElementById("barrio").innerText=depto["Barrio"]
+
+document.getElementById("badgeBarrio").innerHTML =
+`📍 ${depto["Barrio"]} · ${depto["Ambientes"]} amb`
+
 document.getElementById("direccion").innerText=depto["Dirección"]
-document.getElementById("descripcion").innerText=depto["Descripción"]
-document.getElementById("precio").innerText=depto["Valor"]+" USD / mes"
+
+document.getElementById("precio").innerText="USD " + depto["Valor"]
+
 document.getElementById("incluye").innerText=depto["Incluye"]
 
 let valor=parseFloat(depto["Valor"])
@@ -363,14 +367,14 @@ historial.push("mascotas")
 document.getElementById("modalContent").innerHTML=`
 <span class="closeBtn" onclick="cerrarModal()">✖</span>
 
-<h2>Mascotas</h2>
+<h2>🐶 Mascotas</h2>
 <select id="input">
 <option>Si</option>
 <option>No</option>
 </select>
 
 <button class="backBtn" onclick="volver()">Atrás</button>
-<button onclick="guardar('mascotas')">Finalizar</button>
+<button onclick="mostrarBotonFinal()">Continuar</button>
 `
 }
 
@@ -401,7 +405,21 @@ if(campo=="nombre") pasoPersonas()
 else if(campo=="personas") pasoIngreso()
 else if(campo=="ingreso") pasoTiempo()
 else if(campo=="tiempo") pasoMascotas()
-else enviarWhatsApp()
+}
+
+function mostrarBotonFinal(){
+
+let val=document.getElementById("input").value
+formData["mascotas"]=val
+
+document.getElementById("modalContent").innerHTML=`
+<span class="closeBtn" onclick="cerrarModal()">✖</span>
+
+<h2>🎉 ¡Listo!</h2>
+<p>Ya tenemos tus datos. Ahora podés hablar con un asesor 👇</p>
+
+<button class="btnGreen" onclick="enviarWhatsApp()">💬 Ir a WhatsApp</button>
+`
 }
 
 function enviarWhatsApp(){
