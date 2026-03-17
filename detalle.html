@@ -13,22 +13,33 @@ background:#0f172a;
 color:white;
 font-family:Arial;
 margin:0;
+font-size:20px;
 }
 
-.container{max-width:900px;margin:auto;padding-bottom:100px;}
+.container{max-width:900px;margin:auto;padding-bottom:120px;}
 
-.hero{text-align:center;padding:30px;}
+.hero{text-align:center;padding:40px;}
 
-.precio{color:#facc15;font-size:1.8em;}
+h1{font-size:2.2em;}
 
-.galeria{display:flex;overflow-x:auto;gap:10px;padding:20px;}
-.galeria img{height:200px;border-radius:10px;}
+.precio{color:#facc15;font-size:2.2em;margin-top:10px;}
+
+.galeria{display:flex;overflow-x:auto;gap:12px;padding:20px;}
+.galeria img{height:220px;border-radius:12px;}
 
 .box{
 background:#1e293b;
-padding:15px;
-border-radius:12px;
-margin:10px;
+padding:20px;
+border-radius:14px;
+margin:12px;
+}
+
+h2{font-size:1.6em;}
+
+.ambientesGrande{
+font-size:2.5em;
+font-weight:bold;
+color:#38bdf8;
 }
 
 .cta{
@@ -37,8 +48,48 @@ bottom:0;
 width:100%;
 background:#25D366;
 text-align:center;
-padding:18px;
-font-size:1.2em;
+padding:22px;
+font-size:1.4em;
+cursor:pointer;
+}
+
+.modal{
+position:fixed;
+top:0;left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.8);
+display:none;
+justify-content:center;
+align-items:center;
+}
+
+.modalContent{
+background:#1e293b;
+padding:25px;
+border-radius:12px;
+width:90%;
+max-width:400px;
+text-align:center;
+}
+
+input{
+width:90%;
+padding:12px;
+margin-top:10px;
+border-radius:8px;
+border:none;
+font-size:1em;
+}
+
+button{
+margin-top:15px;
+padding:12px 20px;
+border:none;
+border-radius:8px;
+background:#22c55e;
+color:white;
+font-size:1em;
 cursor:pointer;
 }
 
@@ -57,30 +108,39 @@ cursor:pointer;
 <div class="galeria" id="galeria"></div>
 
 <div class="box">
-<h2>Detalles</h2>
-<div id="detalles"></div>
-</div>
-
-<div class="box">
-<h2>Ubicación</h2>
+<h2>Tu espacio ideal en Buenos Aires</h2>
 <div id="direccion"></div>
-<iframe id="mapa" style="width:100%;height:200px;border:none;margin-top:10px"></iframe>
 </div>
 
 <div class="box">
-<h2>Incluye</h2>
+<h2>Ambientes</h2>
+<div id="ambientes" class="ambientesGrande"></div>
+</div>
+
+<div class="box">
+<h2>Lo que incluye</h2>
 <div id="incluye"></div>
 </div>
 
 <div class="box">
-<h2>Total estimado</h2>
+<h2>Ubicación estratégica</h2>
+<iframe id="mapa" style="width:100%;height:220px;border:none;margin-top:10px"></iframe>
+</div>
+
+<div class="box">
+<h2>Estimación total</h2>
 <div id="total"></div>
 </div>
 
 </div>
 
-<div class="cta" onclick="consultar()">
+<div class="cta" onclick="iniciarProceso()">
 💬 Consultar por WhatsApp
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+<div class="modalContent" id="modalContent"></div>
 </div>
 
 <script>
@@ -88,6 +148,7 @@ cursor:pointer;
 const csvURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vQ2E7ECUfY-ps4Ok0_1TJxTR1UPoYl-_ZYkGNlvhk9eZWHBslhsWtoCiTaPfCjQJ38kojq9pJBeoGep/pub?output=csv"
 
 let depto=null
+let formData={}
 
 const params=new URLSearchParams(window.location.search)
 const index=params.get("i")
@@ -121,7 +182,7 @@ depto["Valor"]+" / mes"
 document.getElementById("direccion").innerText=
 depto["Dirección"]
 
-document.getElementById("detalles").innerText=
+document.getElementById("ambientes").innerText=
 depto["Ambientes"]+" ambientes"
 
 document.getElementById("incluye").innerText=
@@ -143,11 +204,87 @@ g.appendChild(img)
 
 }
 
-function consultar(){
+// ===== FLUJO =====
 
-let texto=`Hola! Consulto por el depto en ${depto["Dirección"]}, ${depto["Barrio"]}`
+function iniciarProceso(){
+mostrarRequisitos()
+}
+
+function mostrarRequisitos(){
+let m=document.getElementById("modal")
+let c=document.getElementById("modalContent")
+
+c.innerHTML=`
+<h2>Antes de continuar</h2>
+<p>✔ Contrato mínimo 3 meses<br>
+✔ Depósito en garantía<br>
+✔ Sin fiestas ni ruidos molestos</p>
+<button onclick="pasoNombre()">Aceptar y continuar</button>
+`
+
+m.style.display="flex"
+}
+
+function pasoNombre(){
+setPregunta("Nombre completo", "nombre")
+}
+
+function pasoPersonas(){
+setPregunta("¿Cuántas personas?", "personas")
+}
+
+function pasoIngreso(){
+setPregunta("Fecha de ingreso", "ingreso")
+}
+
+function pasoTiempo(){
+setPregunta("¿Por cuánto tiempo?", "tiempo")
+}
+
+function pasoMascotas(){
+setPregunta("¿Tenés mascotas?", "mascotas", true)
+}
+
+function setPregunta(texto, campo, esFinal=false){
+
+let c=document.getElementById("modalContent")
+
+c.innerHTML=`
+<h2>${texto}</h2>
+<input id="input">
+<button onclick="guardar('${campo}', ${esFinal})">Continuar</button>
+`
+}
+
+function guardar(campo, esFinal){
+
+let val=document.getElementById("input").value
+formData[campo]=val
+
+if(campo=="nombre") pasoPersonas()
+else if(campo=="personas") pasoIngreso()
+else if(campo=="ingreso") pasoTiempo()
+else if(campo=="tiempo") pasoMascotas()
+else if(campo=="mascotas") enviarWhatsApp()
+
+}
+
+function enviarWhatsApp(){
+
+let texto=`Hola! Quiero este departamento:
+
+📍 ${depto["Dirección"]} - ${depto["Barrio"]}
+
+👤 Nombre: ${formData.nombre}
+👥 Personas: ${formData.personas}
+📅 Ingreso: ${formData.ingreso}
+⏳ Tiempo: ${formData.tiempo}
+🐶 Mascotas: ${formData.mascotas}
+`
 
 window.open("https://wa.me/5491168686694?text="+encodeURIComponent(texto))
+
+document.getElementById("modal").style.display="none"
 
 }
 
