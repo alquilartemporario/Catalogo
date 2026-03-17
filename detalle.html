@@ -13,14 +13,11 @@ background:#0f172a;
 color:white;
 font-family:Arial;
 margin:0;
-font-size:20px;
 }
 
 .container{max-width:900px;margin:auto;padding-bottom:120px;}
 
 .hero{text-align:center;padding:40px;}
-
-h1{font-size:2em;}
 
 .barrioGrande{
 font-size:2.5em;
@@ -35,22 +32,25 @@ color:#38bdf8;
 
 .box{
 background:#1e293b;
-padding:25px;
+padding:20px;
 border-radius:14px;
 margin:12px;
 font-size:1.6em;
 }
 
-h2{font-size:1.2em;}
+.direccionGrande{font-size:2.5em;}
+.ambientesGrande{font-size:2.5em;color:#38bdf8;}
 
-.direccionGrande{
-font-size:2.5em;
+.story{
+text-align:center;
+font-size:2em;
+padding:20px;
 }
 
-.ambientesGrande{
-font-size:2.5em;
-font-weight:bold;
-color:#38bdf8;
+.pasos{
+font-size:2em;
+text-align:center;
+padding:20px;
 }
 
 .cta{
@@ -73,17 +73,14 @@ background:rgba(0,0,0,0.9);
 display:none;
 justify-content:center;
 align-items:center;
-z-index:999;
 }
 
 .modalContent{
 background:#1e293b;
-padding:35px;
+padding:30px;
 border-radius:12px;
-width:95%;
+width:90%;
 max-width:500px;
-text-align:center;
-font-size:1.4em;
 position:relative;
 }
 
@@ -91,53 +88,11 @@ position:relative;
 position:absolute;
 top:10px;
 right:15px;
-cursor:pointer;
 font-size:2em;
 color:red;
-}
-
-input, select{
-width:90%;
-padding:15px;
-margin-top:15px;
-border-radius:8px;
-border:none;
-font-size:1em;
-}
-
-button{
-margin-top:20px;
-padding:15px 25px;
-border:none;
-border-radius:8px;
-font-size:1em;
 cursor:pointer;
 }
 
-.btnWhite{
-background:white;
-color:black;
-}
-
-.btnGreen{
-background:#22c55e;
-color:white;
-}
-
-.backBtn{
-background:#334155;
-margin-right:10px;
-}
-
-#mapa{
-width:100%;
-aspect-ratio:1/1;
-border:none;
-margin-top:10px;
-cursor:pointer;
-}
-
-/* Carrusel */
 .carousel{
 display:flex;
 overflow-x:auto;
@@ -149,17 +104,8 @@ height:80vh;
 border-radius:12px;
 }
 
-.story{
-padding:20px;
-text-align:center;
-font-size:1.4em;
-line-height:1.4em;
-}
-
-.highlight{
-color:#38bdf8;
-font-weight:bold;
-}
+.btnWhite{background:white;color:black;padding:15px;border-radius:8px;}
+.btnGreen{background:#22c55e;color:white;padding:15px;border-radius:8px;}
 
 </style>
 </head>
@@ -170,54 +116,40 @@ font-weight:bold;
 
 <div class="hero">
 <div id="barrio" class="barrioGrande"></div>
-<h1 id="titulo"></h1>
-<div class="precio" id="precio"></div>
+<div id="titulo"></div>
+<div id="precio" class="precio"></div>
 </div>
 
 <div class="story">
-Dejá de preocuparte por encontrar un lugar seguro y bien ubicado.<br><br>
-<span class="highlight">Este departamento ya está listo para vos.</span>
+Si buscas mudarte de forma simple este departamento es ideal para vos
 </div>
 
 <div class="galeria" id="galeria"></div>
 
-<div class="story">
-Sabemos lo difícil que es buscar desde lejos, comparar opciones y no saber si vas a tomar una buena decisión.<br><br>
-Acá tenés una opción clara, lista y validada.
-</div>
-
 <div class="box">
-<h2>Tu espacio ideal en Buenos Aires</h2>
 <div id="direccion" class="direccionGrande"></div>
 </div>
 
 <div class="box">
-<h2>Ambientes</h2>
 <div id="ambientes" class="ambientesGrande"></div>
 </div>
 
 <div class="box">
-<h2>Lo que incluye</h2>
 <div id="incluye"></div>
 </div>
 
 <div class="box">
-<h2>Ubicación estratégica</h2>
-<iframe id="mapa" onclick="abrirMapa()"></iframe>
+<iframe id="mapa" style="width:100%;aspect-ratio:1/1;border:none"></iframe>
 </div>
 
 <div class="box">
-<h2>Monto a abonar al ingreso</h2>
 <div id="total"></div>
 </div>
 
-<div class="story">
-Es simple 👇<br><br>
-1. Confirmás que te interesa<br>
+<div class="pasos">
+1. Consultás<br>
 2. Validamos tu perfil<br>
-3. Coordinás visita o reserva<br><br>
-
-<span class="highlight">Y listo, ya tenés dónde vivir sin vueltas.</span>
+3. Reservás sin vueltas
 </div>
 
 </div>
@@ -239,9 +171,23 @@ Es simple 👇<br><br>
 
 <script>
 
+const csvURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vQ2E7ECUfY-ps4Ok0_1TJxTR1UPoYl-_ZYkGNlvhk9eZWHBslhsWtoCiTaPfCjQJ38kojq9pJBeoGep/pub?output=csv"
+
+let depto=null
 let fotosGlobal=[]
 
-// ====== resto igual ======
+const params=new URLSearchParams(window.location.search)
+const index=params.get("i")
+
+Papa.parse(csvURL,{
+download:true,
+header:true,
+complete:function(results){
+let data=results.data.filter(r=>r["Dirección"])
+depto=data[index]
+cargar()
+}
+})
 
 function cargar(){
 
@@ -252,7 +198,23 @@ return "https://lh3.googleusercontent.com/d/"+id[0]
 
 fotosGlobal=fotos
 
+document.getElementById("barrio").innerText=depto["Barrio"]
+document.getElementById("titulo").innerText=depto["Ambientes"]+" ambientes"
+document.getElementById("precio").innerText=depto["Valor"]+" / mes"
+document.getElementById("direccion").innerText=depto["Dirección"]
+document.getElementById("ambientes").innerText=depto["Ambientes"]+" ambientes"
+document.getElementById("incluye").innerText=depto["Incluye"]
+
+let valor=parseFloat(depto["Valor"])
+let total=valor*3
+
+document.getElementById("total").innerHTML="Total: USD "+total
+
+document.getElementById("mapa").src=
+"https://maps.google.com/maps?q="+encodeURIComponent(depto["Dirección"]+", Buenos Aires")+"&output=embed"
+
 let g=document.getElementById("galeria")
+g.innerHTML=""
 
 fotos.forEach((f,i)=>{
 let img=document.createElement("img")
@@ -261,10 +223,9 @@ img.onclick=()=>abrirVisor(i)
 g.appendChild(img)
 })
 
-// resto igual...
 }
 
-// ===== VISOR CARRUSEL =====
+// ===== CARRUSEL =====
 
 function abrirVisor(index){
 
@@ -278,7 +239,6 @@ c.appendChild(img)
 })
 
 document.getElementById("visor").style.display="flex"
-
 c.scrollLeft=index * window.innerWidth
 }
 
@@ -286,40 +246,21 @@ function cerrarVisor(){
 document.getElementById("visor").style.display="none"
 }
 
-// ===== REQUISITOS =====
+// ===== WHATSAPP =====
 
-function mostrarRequisitos(){
-
-let c=document.getElementById("modalContent")
-
-c.innerHTML=`
-<span class="closeBtn" onclick="cerrarModal()">✖</span>
-<h2>Requisitos</h2>
-
-<p style="text-align:left">
-• DNI o pasaporte<br>
-• Ingresos<br>
-• Mes adelantado<br>
-• Depósito<br>
-• Honorarios
-</p>
-
-<button id="btnAceptar" class="btnWhite" onclick="activarAceptar()">
-Aceptar requisitos
-</button>
-
-<button id="btnContinuar" class="btnGreen" onclick="pasoNombre()" style="display:none">
-Continuar
-</button>
-`
-document.getElementById("modal").style.display="flex"
+function iniciarProceso(){
+enviarWhatsApp()
 }
 
-function activarAceptar(){
-let btn=document.getElementById("btnAceptar")
-btn.classList.remove("btnWhite")
-btn.classList.add("btnGreen")
-document.getElementById("btnContinuar").style.display="block"
+function enviarWhatsApp(){
+
+let texto=`Hola! Quiero más info sobre este departamento:
+
+📍 ${depto["Dirección"]} - ${depto["Barrio"]}
+`
+
+window.open("https://wa.me/5491168686694?text="+encodeURIComponent(texto))
+
 }
 
 </script>
