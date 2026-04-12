@@ -46,18 +46,6 @@ margin:12px;
 font-size:1.6em;
 }
 
-.story{
-text-align:center;
-font-size:2em;
-padding:20px;
-}
-
-.pasos{
-font-size:2.8em;
-text-align:center;
-padding:30px;
-}
-
 .cta{
 position:fixed;
 bottom:0;
@@ -86,10 +74,10 @@ background:#1e293b;
 padding:50px;
 border-radius:16px;
 width:95%;
-max-width:700px;
+max-width:600px;
 position:relative;
 text-align:center;
-font-size:1.6em;
+font-size:1.4em;
 }
 
 .closeBtn{
@@ -101,7 +89,7 @@ color:red;
 cursor:pointer;
 }
 
-input, select{
+input{
 width:95%;
 padding:20px;
 margin-top:20px;
@@ -119,27 +107,12 @@ cursor:pointer;
 font-size:1.2em;
 }
 
-.btnWhite{background:white;color:black;}
 .btnGreen{background:#22c55e;color:white;}
 
-.backBtn{background:#334155;color:white;margin-right:10px;}
-
-.carousel{
-display:flex;
-overflow-x:auto;
-gap:15px;
-}
-
-.carousel img{
-height:80vh;
-border-radius:12px;
-}
-
-.mapa{
-margin:20px;
-border-radius:14px;
-overflow:hidden;
-height:400px;
+.mascotas{
+font-size:1.8em;
+text-align:center;
+margin-top:10px;
 }
 
 </style>
@@ -150,48 +123,17 @@ height:400px;
 <div class="container">
 
 <div class="hero">
-<div style="display:flex;justify-content:center;align-items:center;gap:15px;flex-wrap:wrap;">
-<div id="badgeBarrio" class="badgeBarrio"></div>
 <div id="barrio" class="barrioGrande"></div>
-</div>
-</div>
-
-<div class="story">
-✨ Tu próximo hogar temporal en Buenos Aires te está esperando 🏡
+<div id="badgeBarrio" class="badgeBarrio"></div>
 </div>
 
 <div class="galeria" id="galeria"></div>
 
-<div class="box">
-<b>📍 Dirección:</b><br>
-<div id="direccion"></div>
-</div>
+<div class="box"><b>📍 Dirección:</b><br><div id="direccion"></div></div>
+<div class="box"><b>💰 Valor:</b><br><div id="precio"></div></div>
+<div class="box"><b>📦 Incluye:</b><br><div id="incluye"></div></div>
 
-<div class="box">
-<b>💰 Valor:</b><br>
-<div id="precio"></div>
-</div>
-
-<div class="box">
-<b>📦 Incluye:</b><br>
-<div id="incluye"></div>
-</div>
-
-<div class="box">
-<b>🧾 Total a abonar el día de ingreso:</b><br>
-<div id="total"></div>
-</div>
-
-<div class="mapa">
-<iframe id="mapaFrame" width="100%" height="100%" style="border:0;" loading="lazy"></iframe>
-</div>
-
-<div class="pasos">
-<b>🚀 Mudarte es fácil:</b><br><br>
-💬 Realizá tu consulta<br>
-🤝 Hablá con un asesor<br>
-🏡 Coordiná tu visita o reserva
-</div>
+<div class="box mascotas" id="mascotas"></div>
 
 </div>
 
@@ -199,15 +141,8 @@ height:400px;
 💬 CONSULTAR POR WHATSAPP
 </div>
 
-<!-- MODAL -->
 <div class="modal" id="modal">
 <div class="modalContent" id="modalContent"></div>
-</div>
-
-<!-- VISOR -->
-<div class="modal" id="visor">
-<div class="carousel" id="carousel"></div>
-<span class="closeBtn" onclick="cerrarVisor()">✖</span>
 </div>
 
 <script>
@@ -217,7 +152,6 @@ const csvURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vQ2E7ECUfY-ps4Ok0_
 let depto=null
 let fotosGlobal=[]
 let formData={}
-let historial=[]
 
 const params=new URLSearchParams(window.location.search)
 const index=params.get("i")
@@ -239,184 +173,63 @@ let id=f.match(/[-\w]{25,}/)
 return "https://lh3.googleusercontent.com/d/"+id[0]
 })
 
-fotosGlobal=fotos
-
-document.getElementById("barrio").innerText=depto["Barrio"]
-
-document.getElementById("badgeBarrio").innerText =
-`${depto["Ambientes"]} amb`
+document.getElementById("barrio").innerText=depto["barrio"]
+document.getElementById("badgeBarrio").innerText=depto["Ambientes"]+" amb"
 
 document.getElementById("direccion").innerText=depto["Dirección"]
-
-document.getElementById("precio").innerText="USD " + depto["Valor"]
-
+document.getElementById("precio").innerText="USD " + depto["Valor:"]
 document.getElementById("incluye").innerText=depto["Incluye"]
 
-let valor=parseFloat(depto["Valor"])
-let total=valor*3
+// MASCOTAS
+let perro = (depto["perro?"]||"").toLowerCase()=="si"
+let gato = (depto["gato?"]||"").toLowerCase()=="si"
 
-document.getElementById("total").innerHTML=`
-Mes adelantado: USD ${valor}<br>
-Depósito: USD ${valor}<br>
-Honorarios: USD ${valor}<br><br>
-<b>Total: USD ${total}</b>
+document.getElementById("mascotas").innerHTML=`
+🐶 ${perro ? "Apto perro" : "No permitido"}<br>
+🐱 ${gato ? "Apto gato" : "No permitido"}
 `
-
-// MAPA
-document.getElementById("mapaFrame").src=
-`https://www.google.com/maps?q=${encodeURIComponent(depto["Dirección"])}&output=embed`
 
 let g=document.getElementById("galeria")
 g.innerHTML=""
 
-fotos.forEach((f,i)=>{
+fotos.forEach(f=>{
 let img=document.createElement("img")
 img.src=f
-img.onclick=()=>abrirVisor(i)
 g.appendChild(img)
 })
 
 }
 
-function abrirVisor(index){
-let c=document.getElementById("carousel")
-c.innerHTML=""
-
-fotosGlobal.forEach(f=>{
-let img=document.createElement("img")
-img.src=f
-c.appendChild(img)
-})
-
-document.getElementById("visor").style.display="flex"
-c.scrollLeft=index * window.innerWidth
-}
-
-function cerrarVisor(){
-document.getElementById("visor").style.display="none"
-}
-
-// ===== FLUJO =====
+// ===== FLUJO SIMPLE =====
 
 function iniciarProceso(){
-historial=[]
 mostrarRequisitos()
 }
 
-function cerrarModal(){
-document.getElementById("modal").style.display="none"
-}
-
 function mostrarRequisitos(){
-let c=document.getElementById("modalContent")
-
-c.innerHTML=`
+document.getElementById("modalContent").innerHTML=`
 <span class="closeBtn" onclick="cerrarModal()">✖</span>
 
-<h1>🔑 Ingreso simple</h1>
+<h2>🔑 Requisitos</h2>
 
-<p style="text-align:left;font-size:1.3em">
-1. DNI o Pasaporte<br>
-2. Demostración de ingresos / estudios<br>
-3. Contratos de 3 a 12 meses
-</p>
+<p>DNI o Pasaporte<br>
+Contrato mínimo 3 meses<br>
+Mes + Depósito + Honorarios</p>
 
-<p style="text-align:left;font-size:1.3em">
-📅 Al firmar:<br>
-1. Mes adelantado<br>
-2. Depósito<br>
-3. Honorarios
-</p>
-
-<button id="aceptar" class="btnWhite" onclick="activarAceptar()">Aceptar requisitos</button>
+<button class="btnGreen" onclick="pedirDatos()">Continuar</button>
 `
 
 document.getElementById("modal").style.display="flex"
 }
 
-function activarAceptar(){
-document.getElementById("aceptar").classList.remove("btnWhite")
-document.getElementById("aceptar").classList.add("btnGreen")
-
-setTimeout(()=>{
-pasoNombre()
-},500)
-}
-
-function setPaso(texto,campo,tipo){
-historial.push(campo)
-
+function pedirDatos(){
 document.getElementById("modalContent").innerHTML=`
 <span class="closeBtn" onclick="cerrarModal()">✖</span>
 
-<h2>${texto}</h2>
-<input id="input" type="${tipo}">
+<h2>Completa para continuar</h2>
 
-<button class="backBtn" onclick="volver()">Atrás</button>
-<button onclick="guardar('${campo}')">Continuar</button>
-`
-}
-
-function pasoNombre(){setPaso("Nombre","nombre","text")}
-function pasoPersonas(){setPaso("Cantidad de personas","personas","number")}
-function pasoIngreso(){setPaso("Fecha de ingreso","ingreso","date")}
-function pasoTiempo(){setPaso("Meses (mínimo 3)","tiempo","number")}
-
-function pasoMascotas(){
-historial.push("mascotas")
-document.getElementById("modalContent").innerHTML=`
-<span class="closeBtn" onclick="cerrarModal()">✖</span>
-
-<h2>🐶 Mascotas</h2>
-<select id="input">
-<option>Si</option>
-<option>No</option>
-</select>
-
-<button class="backBtn" onclick="volver()">Atrás</button>
-<button onclick="mostrarBotonFinal()">Continuar</button>
-`
-}
-
-function volver(){
-historial.pop()
-let prev=historial.pop()
-
-if(!prev){mostrarRequisitos();return}
-
-if(prev=="nombre") pasoNombre()
-if(prev=="personas") pasoPersonas()
-if(prev=="ingreso") pasoIngreso()
-if(prev=="tiempo") pasoTiempo()
-}
-
-function guardar(campo){
-
-let val=document.getElementById("input").value
-
-if(campo=="tiempo" && val<3){
-alert("Mínimo 3 meses")
-return
-}
-
-formData[campo]=val
-
-if(campo=="nombre") pasoPersonas()
-else if(campo=="personas") pasoIngreso()
-else if(campo=="ingreso") pasoTiempo()
-else if(campo=="tiempo") pasoMascotas()
-}
-
-function mostrarBotonFinal(){
-
-let val=document.getElementById("input").value
-formData["mascotas"]=val
-
-document.getElementById("modalContent").innerHTML=`
-<span class="closeBtn" onclick="cerrarModal()">✖</span>
-
-<h2>🎉 ¡Listo!</h2>
-<p>Ya tenemos tus datos. Ahora podés hablar con un asesor 👇</p>
+<input id="nombre" placeholder="Tu nombre">
+<input id="ingreso" type="date">
 
 <button class="btnGreen" onclick="enviarWhatsApp()">💬 Ir a WhatsApp</button>
 `
@@ -424,19 +237,22 @@ document.getElementById("modalContent").innerHTML=`
 
 function enviarWhatsApp(){
 
-let texto=`Hola! mi nombre es ${formData.nombre} Quiero mas info sobre este depa:
+let nombre=document.getElementById("nombre").value
+let ingreso=document.getElementById("ingreso").value
 
-📍 ${depto["Dirección"]} - ${depto["Barrio"]}
+let texto=`Hola! soy ${nombre} y quiero info de este depto:
 
-👥 ${formData.personas} personas
-📅 ${formData.ingreso}
-⏳ ${formData.tiempo} meses
-🐶 ${formData.mascotas}
+📍 ${depto["Dirección"]} - ${depto["barrio"]}
+📅 Ingreso: ${ingreso}
 `
 
 window.open("https://wa.me/5491168686694?text="+encodeURIComponent(texto))
 
 cerrarModal()
+}
+
+function cerrarModal(){
+document.getElementById("modal").style.display="none"
 }
 
 </script>
