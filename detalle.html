@@ -115,7 +115,7 @@ text-align:center;
 margin-top:10px;
 }
 
-/* CARRUSEL */
+/* 🔥 CARRUSEL */
 
 .modalImg{
 position:fixed;
@@ -180,8 +180,7 @@ cursor:pointer;
 <div class="galeria" id="galeria"></div>
 
 <div class="box"><b>📍 Dirección:</b><br><div id="direccion"></div></div>
-<div class="box"><b>💰 Valor mensual:</b><br><div id="precio"></div></div>
-<div class="box"><b>💳 Ingreso (x3):</b><br><div id="ingresoTotal"></div></div>
+<div class="box"><b>💰 Valor:</b><br><div id="precio"></div></div>
 <div class="box"><b>📦 Incluye:</b><br><div id="incluye"></div></div>
 
 <div class="box mascotas" id="mascotas"></div>
@@ -196,7 +195,7 @@ cursor:pointer;
 <div class="modalContent" id="modalContent"></div>
 </div>
 
-<!-- CARRUSEL -->
+<!-- MODAL IMAGEN -->
 <div class="modalImg" id="modalImg">
 <button class="closeImg" onclick="cerrarImg()">✖</button>
 <button class="navBtn prev" onclick="cambiar(-1)">‹</button>
@@ -225,10 +224,6 @@ cargar()
 }
 })
 
-function limpiarNumero(valor){
-return parseFloat(valor.replace(/[^\d]/g,"")) || 0
-}
-
 function cargar(){
 
 let fotos=depto["Fotos"].split(",").map(f=>{
@@ -238,22 +233,11 @@ return "https://lh3.googleusercontent.com/d/"+id[0]
 
 fotosGlobal=fotos
 
-// 🔥 TITULO
-document.title = `${depto["Ambientes"]} amb en ${depto["barrio"]}`
-
 document.getElementById("barrio").innerText=depto["barrio"]
 document.getElementById("badgeBarrio").innerText=depto["Ambientes"]+" amb"
 
 document.getElementById("direccion").innerText=depto["Dirección"]
-
-let valorTexto = depto["Valor:"]
-document.getElementById("precio").innerText=valorTexto
-
-// 🔥 CALCULO X3
-let valorNum = limpiarNumero(valorTexto)
-let total = valorNum * 3
-document.getElementById("ingresoTotal").innerText="USD " + total
-
+document.getElementById("precio").innerText="USD " + depto["Valor:"]
 document.getElementById("incluye").innerText=depto["Incluye"]
 
 let perro = (depto["perro?"]||"").toLowerCase()=="si"
@@ -299,7 +283,7 @@ function mostrar(){
 document.getElementById("imgGrande").src=fotosGlobal[indexFoto]
 }
 
-/* FLUJO */
+/* WHATSAPP FLOW */
 
 function iniciarProceso(){
 mostrarRequisitos()
@@ -309,23 +293,13 @@ function mostrarRequisitos(){
 document.getElementById("modalContent").innerHTML=`
 <span class="closeBtn" onclick="cerrarModal()">✖</span>
 
-<h2>🔑 El ingreso a nuestros departamentos es muy simple :</h2>
+<h2>🔑 Requisitos</h2>
 
-<p style="text-align:left">
-1. Presentar DNI o Pasaporte.<br>
-2. Demostración de ingresos y estudios (si eres estudiante).<br>
-3. Contratos desde 3 hasta 12 meses, según cada caso<br><br>
+<p>DNI o Pasaporte<br>
+Contrato mínimo 3 meses<br>
+Mes + Depósito + Honorarios</p>
 
-📅 Al firmar el contrato, se tiene que abonar:<br><br>
-
-1. Primer mes por adelantado.<br>
-2. Un mes de depósito (recomendamos que sea en dólares, se reintegra al finalizar la estadía).<br>
-3. Un mes de honorarios (cubren gastos administrativos y de contrato).<br><br>
-
-💼 La demostración de ingresos se puede resolver de distintas maneras según cada caso
-</p>
-
-<button class="btnGreen" onclick="pedirDatos()">Aceptar requisitos</button>
+<button class="btnGreen" onclick="pedirDatos()">Continuar</button>
 `
 
 document.getElementById("modal").style.display="flex"
@@ -337,8 +311,8 @@ document.getElementById("modalContent").innerHTML=`
 
 <h2>Completa para continuar</h2>
 
-<input id="nombre" placeholder="Tu nombre" required>
-<input id="ingreso" type="date" required>
+<input id="nombre" placeholder="Tu nombre">
+<input id="ingreso" type="date">
 
 <button class="btnGreen" onclick="enviarWhatsApp()">💬 Ir a WhatsApp</button>
 `
@@ -349,22 +323,13 @@ function enviarWhatsApp(){
 let nombre=document.getElementById("nombre").value
 let ingreso=document.getElementById("ingreso").value
 
-if(!nombre || !ingreso){
-alert("Completa todos los datos")
-return
-}
-
-// 🔥 TELEFONO DINAMICO
-let tel = "+" + depto["Vendedor"].replace(/\D/g,"")
-
 let texto=`Hola! soy ${nombre} y quiero info de este depto:
 
 📍 ${depto["Dirección"]} - ${depto["barrio"]}
 📅 Ingreso: ${ingreso}
-💰 Valor: ${depto["Valor:"]}
 `
 
-window.open("https://wa.me/"+tel+"?text="+encodeURIComponent(texto))
+window.open("https://wa.me/5491168686694?text="+encodeURIComponent(texto))
 
 cerrarModal()
 }
