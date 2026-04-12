@@ -20,6 +20,12 @@ overflow-x:hidden;
 
 h1{
 font-size:2.3em;
+margin-bottom:5px;
+}
+
+.subtitulo{
+font-size:1.2em;
+color:#94a3b8;
 margin-bottom:20px;
 }
 
@@ -127,6 +133,11 @@ color:#cbd5e1;
 margin-top:6px;
 }
 
+.mascotas{
+font-size:1.6em;
+margin-top:10px;
+}
+
 /* BOTONES */
 
 .btnRow{
@@ -149,121 +160,22 @@ color:white;
 .btnMapa{background:#2563eb;}
 .btnWsp{background:#25D366;}
 
-/* MODAL */
-
-.modal{
-display:none;
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.95);
-justify-content:center;
-align-items:center;
-flex-direction:column;
-z-index:1000;
-}
-
-.closeModal{
-position:absolute;
-top:20px;
-right:20px;
-background:#ef4444;
-color:white;
-border:none;
-border-radius:50%;
-width:45px;
-height:45px;
-font-size:1.5em;
-cursor:pointer;
-}
-
-/* CARRUSEL */
-
-.carousel{
-display:flex;
-align-items:center;
-gap:20px;
-}
-
-.carousel img{
-max-width:75vw;
-max-height:75vh;
-border-radius:15px;
-}
-
-.navBtn{
-font-size:3em;
-background:none;
-border:none;
-color:white;
-cursor:pointer;
-}
-
-/* CONSULTA */
-
-.formBox{
-background:#1e293b;
-padding:30px;
-border-radius:20px;
-max-width:900px;
-width:90%;
-text-align:left;
-}
-
-#deptoTitulo{
-font-size:2.5em;
-}
-
-#deptoInfo{
-font-size:1.8em;
-margin-bottom:10px;
-}
-
-/* FORMULARIO GRANDE */
-
-.formGrande label{
-font-size:1.6em;
-display:block;
-margin-top:20px;
-}
-
-.formGrande input,
-.formGrande select{
-width:100%;
-padding:18px;
-margin-top:8px;
-border-radius:12px;
-border:none;
-font-size:1.5em;
-background:#0f172a;
-color:white;
-}
-
-.btnEnviar{
-width:100%;
-padding:20px;
-margin-top:25px;
-border:none;
-border-radius:14px;
-background:#25D366;
-font-size:1.6em;
-color:white;
-cursor:pointer;
-}
-
 </style>
 </head>
 
 <body>
 
 <h1>Departamentos Temporarios</h1>
+<div class="subtitulo">@alquilar.temporario es facil seguro y moderno</div>
 
 <div class="container">
 
 <div class="sectionTitle">Ambientes</div>
 <div id="ambientes"></div>
+
+<!-- NUEVOS FILTROS -->
+<button class="btnFiltro" id="filtroPerro">🐶 Apto perro</button>
+<button class="btnFiltro" id="filtroGato">🐱 Apto gato</button>
 
 <div class="sectionTitle">Barrio</div>
 <select id="barrioSelect">
@@ -274,111 +186,14 @@ cursor:pointer;
 
 </div>
 
-<!-- MODAL FOTOS -->
-
-<div class="modal" id="modalFotos">
-
-<button class="closeModal" onclick="cerrarFotos()">✕</button>
-
-<div class="carousel">
-
-<button class="navBtn" onclick="prev()">◀</button>
-
-<div id="slide"></div>
-
-<button class="navBtn" onclick="next()">▶</button>
-
-</div>
-
-</div>
-
-<!-- MODAL CONSULTA -->
-
-<div class="modal" id="modalConsulta">
-
-<button class="closeModal" onclick="cerrarConsulta()">✕</button>
-
-<div class="formBox">
-
-<h2 id="deptoTitulo"></h2>
-
-<div id="deptoInfo"></div>
-
-<h3 style="font-size:2em;margin-top:20px">Requisitos para ingresar</h3>
-
-<div id="bloqueRequisitos">
-
-<ul style="font-size:1.5em;line-height:1.6">
-
-<li>DNI o Pasaporte</li>
-<li>Demostración de ingresos</li>
-<li>Mes de adelanto</li>
-<li>Mes de depósito</li>
-<li>Mes de honorarios</li>
-
-</ul>
-
-<div style="background:#0f172a;padding:18px;border-radius:14px;margin-top:15px;text-align:center">
-
-<div style="font-size:1.2em;color:#94a3b8">
-Total estimado para ingresar
-</div>
-
-<div id="totalIngreso" style="font-size:2.2em;color:#facc15;margin-top:6px;font-weight:bold"></div>
-
-</div>
-
-<button onclick="aceptarRequisitos()" style="width:100%;padding:18px;border:none;border-radius:14px;background:#16a34a;color:white;font-size:1.4em;margin-top:20px">
-Entiendo los requisitos — continuar
-</button>
-
-</div>
-
-<div id="bloqueFormulario" style="display:none">
-
-<h3 style="font-size:2em;margin-bottom:10px">Completa tus datos</h3>
-
-<div class="formGrande">
-
-<label>Nombre</label>
-<input id="nombre">
-
-<label>Cantidad de personas</label>
-<input id="personas" type="number">
-
-<label>Fecha de ingreso</label>
-<input id="fecha" type="date">
-
-<label>¿Por cuánto tiempo?</label>
-<input id="meses" type="number" placeholder="Meses">
-
-<label>¿Mascotas?</label>
-<select id="mascotas">
-<option>No</option>
-<option>Sí</option>
-</select>
-
-<button class="btnEnviar" onclick="enviarConsulta()">
-Enviar consulta por WhatsApp
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
 <script>
 
 const csvURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vQ2E7ECUfY-ps4Ok0_1TJxTR1UPoYl-_ZYkGNlvhk9eZWHBslhsWtoCiTaPfCjQJ38kojq9pJBeoGep/pub?output=csv"
 
 let departamentos=[]
 let ambienteActivo=null
-let slides=[]
-let index=0
-let deptoActual=null
+let filtroPerro=false
+let filtroGato=false
 
 Papa.parse(csvURL,{
 download:true,
@@ -427,6 +242,20 @@ actualizarBarrios()
 
 }
 
+/* FILTROS MASCOTAS */
+
+document.getElementById("filtroPerro").onclick=()=>{
+filtroPerro=!filtroPerro
+document.getElementById("filtroPerro").classList.toggle("activo")
+filtrar()
+}
+
+document.getElementById("filtroGato").onclick=()=>{
+filtroGato=!filtroGato
+document.getElementById("filtroGato").classList.toggle("activo")
+filtrar()
+}
+
 function actualizarBarrios(){
 
 let select=document.getElementById("barrioSelect")
@@ -435,7 +264,7 @@ select.innerHTML='<option value="">Todos</option>'
 
 let filtrados=departamentos.filter(d=>!ambienteActivo || parseInt(d["Ambientes"])==ambienteActivo)
 
-let barrios=[...new Set(filtrados.map(d=>d["Barrio"]))]
+let barrios=[...new Set(filtrados.map(d=>d["barrio"]))]
 
 barrios.sort()
 
@@ -459,7 +288,9 @@ lista.innerHTML=""
 
 let resultados=departamentos
 .filter(d=>(!ambienteActivo || parseInt(d["Ambientes"])==ambienteActivo))
-.filter(d=>(!barrio || d["Barrio"]==barrio))
+.filter(d=>(!barrio || d["barrio"]==barrio))
+.filter(d=>(!filtroPerro || (d["perro?"]||"").toLowerCase()=="si"))
+.filter(d=>(!filtroGato || (d["gato?"]||"").toLowerCase()=="si"))
 
 resultados.forEach(row=>{
 
@@ -468,129 +299,53 @@ let id=f.match(/[-\w]{25,}/)
 return "https://lh3.googleusercontent.com/d/"+id[0]
 })
 
+let perro = (row["perro?"]||"").toLowerCase()=="si"
+let gato = (row["gato?"]||"").toLowerCase()=="si"
+
 let card=document.createElement("div")
 card.className="list-item"
 
 card.innerHTML=`
 
-<img src="${fotos[0]}" class="fotoCard">
+<img src="${fotos[0]}">
 
 <div class="info">
 
-<div class="barrio">${row["Barrio"]}</div>
+<div class="barrio">${row["barrio"]}</div>
 
 <div class="ambientes">${row["Ambientes"]} ambientes</div>
 
 <div class="direccion">${row["Dirección"]}</div>
 
-<div class="valor">${row["Valor"]}</div>
+<div class="valor">${row["Valor:"]}</div>
 
 <div class="incluye">Incluye: ${row["Incluye"] || ""}</div>
 
+<div class="mascotas">
+🐶 ${perro ? "✅" : "❌"} &nbsp;&nbsp; 🐱 ${gato ? "✅" : "❌"}
+</div>
+
 <div class="btnRow">
 
-<button class="btn btnFoto">📸 Fotos</button>
-<button class="btn btnMapa">🗺️ Mapa</button>
-<button class="btn btnWsp">💬 Consulta</button>
+<button class="btn btnFoto">📸</button>
+<button class="btn btnMapa">🗺️</button>
+<button class="btn btnWsp">💬</button>
 
 </div>
 
 </div>
 `
 
-card.querySelector(".fotoCard").onclick=()=>verFotos(row)
-card.querySelector(".btnFoto").onclick=()=>verFotos(row)
 card.querySelector(".btnMapa").onclick=()=>verMapa(row["Dirección"])
 
-/* 🔥 CAMBIO CLAVE */
-card.querySelector(".btnWsp").onclick=()=>abrirVenta(row)
+card.querySelector(".btnWsp").onclick=()=>{
+window.open("detalle.html?dir="+encodeURIComponent(row["Dirección"]))
+}
 
 lista.appendChild(card)
 
 })
 
-}
-
-/* 🔥 NUEVA FUNCIÓN */
-function abrirVenta(row){
-
-let index = departamentos.findIndex(d => d["Dirección"] === row["Dirección"])
-
-window.open("detalle.html?i="+index, "_blank")
-
-}
-
-function consultar(row){
-
-deptoActual=row
-
-let valor=parseFloat(row["Valor"])
-let total=valor*3
-
-document.getElementById("deptoTitulo").innerText=row["Barrio"]+" • "+row["Ambientes"]+" ambientes"
-document.getElementById("deptoInfo").innerHTML=row["Dirección"]+"<br>Valor mensual: "+valor
-document.getElementById("totalIngreso").innerText="USD "+total
-
-document.getElementById("modalConsulta").style.display="flex"
-
-document.getElementById("bloqueRequisitos").style.display="block"
-document.getElementById("bloqueFormulario").style.display="none"
-
-}
-
-function aceptarRequisitos(){
-document.getElementById("bloqueRequisitos").style.display="none"
-document.getElementById("bloqueFormulario").style.display="block"
-}
-
-function cerrarConsulta(){
-document.getElementById("modalConsulta").style.display="none"
-}
-
-function enviarConsulta(){
-
-let nombre=document.getElementById("nombre").value
-let personas=document.getElementById("personas").value
-let fecha=document.getElementById("fecha").value
-let meses=document.getElementById("meses").value
-let mascotas=document.getElementById("mascotas").value
-
-let texto=`Hola! Soy ${nombre}. Consulto por el departamento en ${deptoActual["Dirección"]}, ${deptoActual["Barrio"]}. Somos ${personas} personas. Ingreso ${fecha} por ${meses} meses. Mascotas: ${mascotas}.`
-
-window.open("https://wa.me/5491168686694?text="+encodeURIComponent(texto))
-
-}
-
-function verFotos(row){
-
-slides=[]
-
-row["Fotos"].split(",").forEach(f=>{
-let id=f.match(/[-\w]{25,}/)
-slides.push("https://lh3.googleusercontent.com/d/"+id[0])
-})
-
-index=0
-mostrarSlide()
-
-document.getElementById("modalFotos").style.display="flex"
-
-}
-
-function mostrarSlide(){
-document.getElementById("slide").innerHTML=`<img src="${slides[index]}">`
-}
-
-function next(){
-if(index<slides.length-1){index++;mostrarSlide()}
-}
-
-function prev(){
-if(index>0){index--;mostrarSlide()}
-}
-
-function cerrarFotos(){
-document.getElementById("modalFotos").style.display="none"
 }
 
 function verMapa(dir){
