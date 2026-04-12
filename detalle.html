@@ -76,8 +76,8 @@ border-radius:16px;
 width:95%;
 max-width:600px;
 position:relative;
-text-align:center;
-font-size:1.4em;
+text-align:left;
+font-size:1.2em;
 }
 
 .closeBtn{
@@ -115,7 +115,15 @@ text-align:center;
 margin-top:10px;
 }
 
-/* 🔥 CARRUSEL */
+iframe{
+width:100%;
+height:350px;
+border-radius:12px;
+margin-top:15px;
+border:none;
+}
+
+/* CARRUSEL */
 
 .modalImg{
 position:fixed;
@@ -180,10 +188,21 @@ cursor:pointer;
 <div class="galeria" id="galeria"></div>
 
 <div class="box"><b>📍 Dirección:</b><br><div id="direccion"></div></div>
-<div class="box"><b>💰 Valor:</b><br><div id="precio"></div></div>
+<div class="box"><b>💰 Valor mensual:</b><br><div id="precio"></div></div>
+
+<div class="box">
+<b>💸 Total para el ingreso:</b><br>
+<div id="total"></div>
+</div>
+
 <div class="box"><b>📦 Incluye:</b><br><div id="incluye"></div></div>
 
 <div class="box mascotas" id="mascotas"></div>
+
+<div class="box">
+<b>🗺️ Ubicación:</b><br>
+<iframe id="mapa"></iframe>
+</div>
 
 </div>
 
@@ -238,6 +257,16 @@ document.getElementById("badgeBarrio").innerText=depto["Ambientes"]+" amb"
 
 document.getElementById("direccion").innerText=depto["Dirección"]
 document.getElementById("precio").innerText="USD " + depto["Valor:"]
+
+let valor = parseFloat(depto["Valor:"]) || 0
+
+document.getElementById("total").innerHTML=`
+Mes de adelanto: USD ${valor}<br>
+Mes de depósito: USD ${valor}<br>
+Mes de honorarios: USD ${valor}<br><br>
+<b>Total: USD ${valor*3}</b>
+`
+
 document.getElementById("incluye").innerText=depto["Incluye"]
 
 let perro = (depto["perro?"]||"").toLowerCase()=="si"
@@ -247,6 +276,9 @@ document.getElementById("mascotas").innerHTML=`
 🐶 ${perro ? "Apto perro" : "No permitido"}<br>
 🐱 ${gato ? "Apto gato" : "No permitido"}
 `
+
+document.getElementById("mapa").src =
+"https://www.google.com/maps?q="+encodeURIComponent(depto["Dirección"])+"&output=embed"
 
 let g=document.getElementById("galeria")
 g.innerHTML=""
@@ -293,13 +325,26 @@ function mostrarRequisitos(){
 document.getElementById("modalContent").innerHTML=`
 <span class="closeBtn" onclick="cerrarModal()">✖</span>
 
-<h2>🔑 Requisitos</h2>
+<h2>🔑 El ingreso a nuestros departamentos es muy simple :</h2>
 
-<p>DNI o Pasaporte<br>
-Contrato mínimo 3 meses<br>
-Mes + Depósito + Honorarios</p>
+<p>
+1. Presentar DNI o Pasaporte.<br>
+2. Demostración de ingresos y estudios (si eres estudiante).<br>
+3. Contratos desde 3 hasta 12 meses, según cada caso
+</p>
 
-<button class="btnGreen" onclick="pedirDatos()">Continuar</button>
+<p>
+📅 Al firmar el contrato, se tiene que abonar:<br><br>
+1. Primer mes por adelantado.<br>
+2. Un mes de depósito (recomendamos que sea en dólares, se reintegra al finalizar la estadía).<br>
+3. Un mes de honorarios (cubren gastos administrativos y de contrato).
+</p>
+
+<p>
+💼 La demostración de ingresos se puede resolver de distintas maneras según cada caso
+</p>
+
+<button class="btnGreen" onclick="pedirDatos()">Aceptar requisitos</button>
 `
 
 document.getElementById("modal").style.display="flex"
@@ -326,6 +371,7 @@ let ingreso=document.getElementById("ingreso").value
 let texto=`Hola! soy ${nombre} y quiero info de este depto:
 
 📍 ${depto["Dirección"]} - ${depto["barrio"]}
+💰 USD ${depto["Valor:"]}
 📅 Ingreso: ${ingreso}
 `
 
