@@ -84,7 +84,7 @@ width:95%;
 max-width:600px;
 position:relative;
 text-align:left;
-font-size:1.2em;
+font-size:1.5em; /* +25% */
 }
 
 .closeBtn{
@@ -124,7 +124,7 @@ margin-top:10px;
 
 iframe{
 width:100%;
-height:350px;
+height:420px; /* agrandado */
 border-radius:12px;
 margin-top:15px;
 border:none;
@@ -249,6 +249,17 @@ cargar()
 }
 })
 
+function limpiarNumero(valor){
+return parseFloat((valor+"").replace(/[^0-9.,]/g,"").replace(",","."))
+}
+
+function detectarMoneda(valor){
+valor=(valor+"").toLowerCase()
+if(valor.includes("usd")) return "USD"
+if(valor.includes("$") || valor.includes("ars") || valor.includes("peso")) return "ARS"
+return "USD"
+}
+
 function cargar(){
 
 let fotos=depto["Fotos"].split(",").map(f=>{
@@ -262,15 +273,17 @@ document.getElementById("barrio").innerText=depto["barrio"]
 document.getElementById("badgeBarrio").innerText=depto["Ambientes"]+" amb"
 
 document.getElementById("direccion").innerText=depto["Dirección"]
-document.getElementById("precio").innerText="USD " + depto["Valor:"]
 
-let valor = parseFloat(depto["Valor:"]) || 0
+let moneda=detectarMoneda(depto["Valor:"])
+let valor=limpiarNumero(depto["Valor:"]) || 0
+
+document.getElementById("precio").innerText=moneda+" " + valor
 
 document.getElementById("total").innerHTML=`
-Mes de adelanto: USD ${valor}<br>
-Mes de depósito: USD ${valor}<br>
-Mes de honorarios: USD ${valor}<br><br>
-<b>Total: USD ${valor*3}</b>
+Mes de adelanto: ${moneda} ${valor}<br>
+Mes de depósito: ${moneda} ${valor}<br>
+Mes de honorarios: ${moneda} ${valor}<br><br>
+<b>Total: ${moneda} ${valor*3}</b>
 `
 
 document.getElementById("incluye").innerText=depto["Incluye"]
@@ -284,7 +297,7 @@ document.getElementById("mascotas").innerHTML=`
 `
 
 document.getElementById("mapa").src =
-"https://www.google.com/maps?q="+encodeURIComponent(depto["Dirección"] + ", Ciudad de Buenos Aires, Argentina")+"&output=embed"
+"https://www.google.com/maps?q="+encodeURIComponent(depto["Dirección"] + ", CABA")+"&output=embed"
 
 let g=document.getElementById("galeria")
 g.innerHTML=""
@@ -338,7 +351,7 @@ document.getElementById("modalContent").innerHTML=`
 <p>
 📅 Al firmar el contrato, se tiene que abonar:<br><br>
 1. Primer mes por adelantado.<br>
-2. Un mes de depósito (recomendamos que sea en dólares, se reintegra al finalizar la estadía).<br>
+2. Un mes de depósito (consultar monto si aplica mascota).<br>
 3. Un mes de honorarios (cubren gastos administrativos y de contrato).
 </p>
 
@@ -373,7 +386,7 @@ let ingreso=document.getElementById("ingreso").value
 let texto=`Hola! soy ${nombre} y quiero info de este depto:
 
 📍 ${depto["Dirección"]} - ${depto["barrio"]}
-💰 USD ${depto["Valor:"]}
+💰 ${depto["Valor:"]}
 📅 Ingreso: ${ingreso}
 `
 
