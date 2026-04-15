@@ -160,7 +160,6 @@ color:white;
 .btnMapa{background:#2563eb;}
 .btnWsp{background:#25D366;}
 
-/* LABELS (agregado sin afectar estilos existentes) */
 .btnLabels{
 display:flex;
 gap:8px;
@@ -248,7 +247,6 @@ cursor:pointer;
 
 </div>
 
-<!-- MODAL -->
 <div class="modal" id="modal">
 <button class="closeBtn" onclick="cerrarModal()">✖</button>
 <button class="navBtn prev" onclick="cambiar(-1)">‹</button>
@@ -272,47 +270,29 @@ Papa.parse(csvURL,{
 download:true,
 header:true,
 complete:function(results){
-
 departamentos=results.data.filter(r=>r["Dirección"])
-
 crearFiltros()
 filtrar()
-
 }
 })
 
 function crearFiltros(){
-
 let amb=[...new Set(departamentos.map(d=>parseInt(d["Ambientes"])))]
-
 amb.sort((a,b)=>a-b)
-
 amb.forEach(a=>{
-
 let b=document.createElement("button")
-
 b.className="btnFiltro"
 b.innerText=a+" ambientes"
-
 b.onclick=()=>{
-
 ambienteActivo=ambienteActivo==a?null:a
-
 document.querySelectorAll("#ambientes .btnFiltro").forEach(btn=>btn.classList.remove("activo"))
-
 if(ambienteActivo){ b.classList.add("activo") }
-
 actualizarBarrios()
 filtrar()
-
 }
-
 document.getElementById("ambientes").appendChild(b)
-
 })
-
 actualizarBarrios()
-
 }
 
 document.getElementById("filtroPerro").onclick=()=>{
@@ -328,33 +308,24 @@ filtrar()
 }
 
 function actualizarBarrios(){
-
 let select=document.getElementById("barrioSelect")
-
 select.innerHTML='<option value="">Todos</option>'
-
 let filtrados=departamentos.filter(d=>!ambienteActivo || parseInt(d["Ambientes"])==ambienteActivo)
-
 let barrios=[...new Set(filtrados.map(d=>d["barrio"]))]
-
 barrios.sort()
-
 barrios.forEach(b=>{
 let op=document.createElement("option")
 op.value=b
 op.textContent=b
 select.appendChild(op)
 })
-
 select.onchange=filtrar
-
 }
 
 function filtrar(){
 
 let barrio=document.getElementById("barrioSelect").value
 let lista=document.getElementById("lista")
-
 lista.innerHTML=""
 
 let resultados=departamentos
@@ -376,7 +347,8 @@ let gato = (row["gato?"]||"").toLowerCase()=="si"
 let card=document.createElement("div")
 card.className="list-item"
 
-let linkDetalle="detalle.html?dir="+encodeURIComponent(row["Dirección"])
+let basePath=window.location.pathname.replace("index.html","")
+let fullLink=window.location.origin + basePath + "detalle.html?dir="+encodeURIComponent(row["Dirección"])
 
 card.innerHTML=`
 
@@ -385,13 +357,9 @@ card.innerHTML=`
 <div class="info">
 
 <div class="barrio">${row["barrio"]}</div>
-
 <div class="ambientes">${row["Ambientes"]} ambientes</div>
-
 <div class="direccion">${row["Dirección"]}</div>
-
 <div class="valor">${row["Valor:"]}</div>
-
 <div class="incluye">Incluye: ${row["Incluye"] || ""}</div>
 
 <div class="mascotas">
@@ -399,12 +367,10 @@ card.innerHTML=`
 </div>
 
 <div class="btnRow">
-
 <button class="btn btnFoto">📸</button>
 <button class="btn btnMapa">🗺️</button>
 <button class="btn btnWsp">💬</button>
 <button class="btn btnWsp btnCompartir">📤</button>
-
 </div>
 
 <div class="btnLabels">
@@ -423,12 +389,11 @@ card.querySelector(".imgPrincipal").onclick=()=>abrirModal(fotos)
 card.querySelector(".btnMapa").onclick=()=>verMapa(row["Dirección"])
 
 card.querySelector(".btnWsp").onclick=()=>{
-window.open(linkDetalle)
+window.open(fullLink)
 }
 
 card.querySelector(".btnCompartir").onclick=()=>{
-let url="https://wa.me/?text="+encodeURIComponent("Mirá este departamento: "+window.location.origin+"/"+linkDetalle)
-window.open(url)
+window.open("https://wa.me/?text="+encodeURIComponent("Mirá este departamento: "+fullLink))
 }
 
 lista.appendChild(card)
