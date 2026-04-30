@@ -15,20 +15,24 @@ font-family:Arial;
 margin:0;
 }
 
-.container{max-width:900px;margin:auto;padding-bottom:160px;}
+.container{
+max-width:1000px;
+margin:auto;
+padding-bottom:160px;
+}
 
 .hero{
 text-align:center;
-padding:40px;
+padding:30px 20px;
 display:flex;
 justify-content:center;
 align-items:center;
-gap:20px;
+gap:15px;
 flex-wrap:wrap;
 }
 
 .barrioGrande{
-font-size:4em;
+font-size:3.2em;
 font-weight:bold;
 color:#38bdf8;
 }
@@ -37,20 +41,37 @@ color:#38bdf8;
 display:inline-block;
 background:white;
 color:black;
-padding:12px 18px;
-border-radius:12px;
-font-size:2em;
+padding:10px 16px;
+border-radius:10px;
+font-size:1.4em;
 }
 
-.galeria{display:flex;overflow-x:auto;gap:12px;padding:20px;}
-.galeria img{height:400px;border-radius:12px;cursor:pointer;}
+/* GALERIA MÁS GRANDE */
+.galeria{
+display:flex;
+overflow-x:auto;
+gap:16px;
+padding:20px;
+}
 
+.galeria img{
+height:500px;
+border-radius:14px;
+cursor:pointer;
+}
+
+/* BOX MÁS PROPORCIONADOS */
 .box{
 background:#1e293b;
-padding:25px;
+padding:20px;
 border-radius:14px;
 margin:12px;
-font-size:1.6em;
+font-size:1.2em;
+line-height:1.5em;
+}
+
+.box b{
+font-size:1.1em;
 }
 
 .cta{
@@ -59,8 +80,8 @@ bottom:0;
 width:100%;
 background:#25D366;
 text-align:center;
-padding:40px;
-font-size:2.2em;
+padding:30px;
+font-size:1.8em;
 cursor:pointer;
 font-weight:bold;
 }
@@ -78,13 +99,13 @@ align-items:center;
 
 .modalContent{
 background:#1e293b;
-padding:50px;
+padding:40px;
 border-radius:16px;
 width:95%;
 max-width:600px;
 position:relative;
 text-align:left;
-font-size:1.5em; /* +25% */
+font-size:1.2em;
 }
 
 .closeBtn{
@@ -98,33 +119,33 @@ cursor:pointer;
 
 input{
 width:95%;
-padding:20px;
-margin-top:20px;
+padding:16px;
+margin-top:15px;
 border-radius:10px;
 border:none;
-font-size:1.2em;
+font-size:1em;
 }
 
 button{
-margin-top:25px;
-padding:20px 30px;
+margin-top:20px;
+padding:16px 24px;
 border:none;
 border-radius:10px;
 cursor:pointer;
-font-size:1.2em;
+font-size:1em;
 }
 
 .btnGreen{background:#22c55e;color:white;}
 
 .mascotas{
-font-size:1.8em;
+font-size:1.2em;
 text-align:center;
 margin-top:10px;
 }
 
 iframe{
 width:100%;
-height:420px; /* agrandado */
+height:420px;
 border-radius:12px;
 margin-top:15px;
 border:none;
@@ -147,8 +168,8 @@ flex-direction:column;
 }
 
 .modalImg img{
-max-width:90%;
-max-height:70%;
+max-width:95%;
+max-height:80%;
 border-radius:15px;
 }
 
@@ -196,11 +217,6 @@ cursor:pointer;
 
 <div class="box"><b>📍 Dirección:</b><br><div id="direccion"></div></div>
 <div class="box"><b>💰 Valor mensual:</b><br><div id="precio"></div></div>
-
-<div class="box">
-<b>💸 Total para el ingreso:</b><br>
-<div id="total"></div>
-</div>
 
 <div class="box"><b>📦 Incluye:</b><br><div id="incluye"></div></div>
 
@@ -279,13 +295,6 @@ let valor=limpiarNumero(depto["Valor:"]) || 0
 
 document.getElementById("precio").innerText=moneda+" " + valor
 
-document.getElementById("total").innerHTML=`
-Mes de adelanto: ${moneda} ${valor}<br>
-Mes de depósito: ${moneda} ${valor}<br>
-Mes de honorarios: ${moneda} ${valor}<br><br>
-<b>Total: ${moneda} ${valor*3}</b>
-`
-
 document.getElementById("incluye").innerText=depto["Incluye"]
 
 let perro = (depto["perro?"]||"").toLowerCase()=="si"
@@ -340,26 +349,15 @@ function mostrarRequisitos(){
 document.getElementById("modalContent").innerHTML=`
 <span class="closeBtn" onclick="cerrarModal()">✖</span>
 
-<h2>🔑 El ingreso a nuestros departamentos es muy simple :</h2>
+<h2>🔑 El ingreso es simple</h2>
 
 <p>
-1. Presentar DNI o Pasaporte.<br>
-2. Demostración de ingresos y estudios (si eres estudiante).<br>
-3. Contratos desde 3 hasta 12 meses, según cada caso
+1. DNI o Pasaporte<br>
+2. Demostración de ingresos<br>
+3. Contratos de 3 a 12 meses
 </p>
 
-<p>
-📅 Al firmar el contrato, se tiene que abonar:<br><br>
-1. Primer mes por adelantado.<br>
-2. Un mes de depósito (consultar monto si aplica mascota).<br>
-3. Un mes de honorarios (cubren gastos administrativos y de contrato).
-</p>
-
-<p>
-💼 La demostración de ingresos se puede resolver de distintas maneras según cada caso
-</p>
-
-<button class="btnGreen" onclick="pedirDatos()">Aceptar requisitos</button>
+<button class="btnGreen" onclick="pedirDatos()">Continuar</button>
 `
 
 document.getElementById("modal").style.display="flex"
