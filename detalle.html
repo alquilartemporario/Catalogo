@@ -1,3 +1,11 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Departamento</title>
+
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
 <style>
 
 body{
@@ -5,7 +13,7 @@ background:#0f172a;
 color:white;
 font-family:Arial;
 margin:0;
-font-size:18px; /* ⬅️ más grande general */
+font-size:18px;
 }
 
 .container{max-width:900px;margin:auto;padding-bottom:160px;}
@@ -21,7 +29,7 @@ flex-wrap:wrap;
 }
 
 .barrioGrande{
-font-size:4.5em; /* ⬅️ leve aumento */
+font-size:4.5em;
 font-weight:bold;
 color:#38bdf8;
 }
@@ -32,7 +40,7 @@ background:white;
 color:black;
 padding:12px 18px;
 border-radius:12px;
-font-size:2.2em; /* ⬅️ leve aumento */
+font-size:2.2em;
 }
 
 .galeria{display:flex;overflow-x:auto;gap:12px;padding:20px;}
@@ -48,7 +56,7 @@ background:#1e293b;
 padding:25px;
 border-radius:14px;
 margin:12px;
-font-size:1.8em; /* ⬅️ leve aumento */
+font-size:1.8em;
 }
 
 .cta{
@@ -63,10 +71,321 @@ cursor:pointer;
 font-weight:bold;
 }
 
+.modal{
+position:fixed;
+top:0;left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.95);
+display:none;
+justify-content:center;
+align-items:center;
+}
+
+.modalContent{
+background:#1e293b;
+padding:50px;
+border-radius:16px;
+width:95%;
+max-width:600px;
+position:relative;
+text-align:left;
+font-size:1.6em;
+}
+
+.closeBtn{
+position:absolute;
+top:15px;
+right:20px;
+font-size:2em;
+color:red;
+cursor:pointer;
+}
+
+input{
+width:95%;
+padding:20px;
+margin-top:20px;
+border-radius:10px;
+border:none;
+font-size:1.2em;
+}
+
+button{
+margin-top:25px;
+padding:20px 30px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+font-size:1.2em;
+}
+
+.btnGreen{background:#22c55e;color:white;}
+
 .mascotas{
-font-size:2em; /* ⬅️ leve aumento */
+font-size:2em;
 text-align:center;
 margin-top:10px;
 }
 
+iframe{
+width:100%;
+height:420px;
+border-radius:12px;
+margin-top:15px;
+border:none;
+}
+
+/* CARRUSEL */
+.modalImg{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.95);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:999;
+flex-direction:column;
+}
+
+.modalImg img{
+max-width:90%;
+max-height:70%;
+border-radius:15px;
+}
+
+.navBtn{
+position:absolute;
+top:50%;
+transform:translateY(-50%);
+font-size:3em;
+background:rgba(255,255,255,0.2);
+border:none;
+color:white;
+padding:10px 20px;
+cursor:pointer;
+}
+
+.prev{left:20px;}
+.next{right:20px;}
+
+.closeImg{
+position:absolute;
+top:20px;
+right:30px;
+font-size:3em;
+background:red;
+border:none;
+color:white;
+padding:10px 20px;
+border-radius:10px;
+cursor:pointer;
+}
+
 </style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="hero">
+<div id="barrio" class="barrioGrande"></div>
+<div id="badgeBarrio" class="badgeBarrio"></div>
+</div>
+
+<div class="galeria" id="galeria"></div>
+
+<div class="box"><b>📍 Dirección:</b><br><div id="direccion"></div></div>
+
+<div class="box"><b>💰 Valor mensual:</b><br><div id="precio"></div></div>
+
+<div class="box"><b>📦 Incluye:</b><br><div id="incluye"></div></div>
+
+<div class="box mascotas" id="mascotas"></div>
+
+<div class="box">
+<b>🗺️ Ubicación:</b><br>
+<iframe id="mapa"></iframe>
+</div>
+
+</div>
+
+<div class="cta" onclick="iniciarProceso()">
+💬 CONSULTAR POR WHATSAPP
+</div>
+
+<div class="modal" id="modal">
+<div class="modalContent" id="modalContent"></div>
+</div>
+
+<div class="modalImg" id="modalImg">
+<button class="closeImg" onclick="cerrarImg()">✖</button>
+<button class="navBtn prev" onclick="cambiar(-1)">‹</button>
+<img id="imgGrande">
+<button class="navBtn next" onclick="cambiar(1)">›</button>
+</div>
+
+<script>
+
+const csvURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vQ2E7ECUfY-ps4Ok0_1TJxTR1UPoYl-_ZYkGNlvhk9eZWHBslhsWtoCiTaPfCjQJ38kojq9pJBeoGep/pub?output=csv"
+
+let depto=null
+let fotosGlobal=[]
+let indexFoto=0
+
+const params=new URLSearchParams(window.location.search)
+const dir=params.get("dir")
+
+Papa.parse(csvURL,{
+download:true,
+header:true,
+complete:function(results){
+let data=results.data.filter(r=>r["Dirección"])
+depto=data.find(d=>d["Dirección"]==dir)
+cargar()
+}
+})
+
+function limpiarNumero(valor){
+let match = (valor+"").match(/[\d,.]+/)
+if(!match) return 0
+return parseFloat(match[0].replace(",",""))
+}
+
+function detectarMoneda(valor){
+valor=(valor+"").toLowerCase()
+if(valor.includes("usd")) return "USD"
+if(valor.includes("$") || valor.includes("ars") || valor.includes("peso")) return "ARS"
+return "USD"
+}
+
+function cargar(){
+
+let fotos=depto["Fotos"].split(",").map(f=>{
+let id=f.match(/[-\w]{25,}/)
+return "https://lh3.googleusercontent.com/d/"+id[0]
+})
+
+fotosGlobal=fotos
+
+document.getElementById("barrio").innerText=depto["barrio"]
+document.getElementById("badgeBarrio").innerText=depto["Ambientes"]+" amb"
+document.getElementById("direccion").innerText=depto["Dirección"]
+
+let moneda=detectarMoneda(depto["Valor:"])
+let valor=limpiarNumero(depto["Valor:"]) || 0
+
+document.getElementById("precio").innerText=moneda+" " + valor
+
+document.getElementById("incluye").innerText=depto["Incluye"]
+
+let perro = (depto["perro?"]||"").toLowerCase()=="si"
+let gato = (depto["gato?"]||"").toLowerCase()=="si"
+
+document.getElementById("mascotas").innerHTML=
+`🐶 ${perro ? "Apto perro (consultar depósito)" : "No permitido"}<br>
+🐱 ${gato ? "Apto gato (consultar depósito)" : "No permitido"}`
+
+document.getElementById("mapa").src =
+"https://www.google.com/maps?q="+encodeURIComponent(depto["Dirección"] + ", CABA")+"&output=embed"
+
+let g=document.getElementById("galeria")
+g.innerHTML=""
+
+fotos.forEach((f,i)=>{
+let img=document.createElement("img")
+img.src=f
+img.onclick=()=>abrirImg(i)
+g.appendChild(img)
+})
+
+}
+
+function abrirImg(i){
+indexFoto=i
+document.getElementById("modalImg").style.display="flex"
+mostrar()
+}
+
+function cerrarImg(){
+document.getElementById("modalImg").style.display="none"
+}
+
+function cambiar(dir){
+indexFoto+=dir
+if(indexFoto<0) indexFoto=fotosGlobal.length-1
+if(indexFoto>=fotosGlobal.length) indexFoto=0
+mostrar()
+}
+
+function mostrar(){
+document.getElementById("imgGrande").src=fotosGlobal[indexFoto]
+}
+
+function iniciarProceso(){
+mostrarRequisitos()
+}
+
+function mostrarRequisitos(){
+document.getElementById("modalContent").innerHTML=`
+<span class="closeBtn" onclick="cerrarModal()">✖</span>
+<h2>🔑 El ingreso a nuestros departamentos es muy simple :</h2>
+<p>
+1. Presentar DNI o Pasaporte.<br>
+2. Demostración de ingresos y estudios (si eres estudiante).<br>
+3. Contratos desde 3 hasta 12 meses, según cada caso
+</p>
+
+<p>
+📅 Al firmar el contrato, se tiene que abonar:<br><br>
+1. Primer mes por adelantado.<br>
+2. Un mes de depósito (consultar monto si aplica mascota).<br>
+3. Un mes de honorarios (cubren gastos administrativos y de contrato).
+</p>
+
+<p>
+💼 La demostración de ingresos se puede resolver de distintas maneras según cada caso
+</p>
+
+<button class="btnGreen" onclick="pedirDatos()">Aceptar requisitos</button>
+`
+
+document.getElementById("modal").style.display="flex"
+}
+
+function pedirDatos(){
+document.getElementById("modalContent").innerHTML=`
+<span class="closeBtn" onclick="cerrarModal()">✖</span>
+<h2>Completa para continuar</h2>
+<input id="nombre" placeholder="Tu nombre">
+<input id="ingreso" type="date">
+<button class="btnGreen" onclick="enviarWhatsApp()">💬 Ir a WhatsApp</button>
+`
+}
+
+function enviarWhatsApp(){
+let nombre=document.getElementById("nombre").value
+let ingreso=document.getElementById("ingreso").value
+
+let texto=`Hola! soy ${nombre} y quiero info de este depto:
+📍 ${depto["Dirección"]} - ${depto["barrio"]}
+💰 ${depto["Valor:"]}
+📅 Ingreso: ${ingreso}`
+
+window.open("https://wa.me/5491168686694?text="+encodeURIComponent(texto))
+
+cerrarModal()
+}
+
+function cerrarModal(){
+document.getElementById("modal").style.display="none"
+}
+
+</script>
+
+</body>
+</html>
