@@ -1318,6 +1318,15 @@ header p{
 
 </style>
 
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','1560475887837172');
+fbq('track','PageView');
+fbq('track','ViewContent',{content_name:'Catálogo de departamentos',content_category:'Alquiler temporario'});
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1560475887837172&ev=PageView&noscript=1"/></noscript>
+<!-- End Meta Pixel Code -->
 </head>
 
 
@@ -1331,7 +1340,7 @@ header p{
 <header>
 
     <h1>
-        Encontrá tu próximo 
+        Encontrá tu próximo
         hogar temporal 🏠
     </h1>
 
@@ -2980,6 +2989,7 @@ function abrirGaleria(
     }
 
 
+    if(window.fbq){ fbq('trackCustom','VerFotos'); }
     fotosActuales =
         fotos;
 
@@ -3089,6 +3099,7 @@ function abrirDescripcion(
     descripcion
 ){
 
+    if(window.fbq){ fbq('trackCustom','VerDescripcion',{content_name:direccion}); }
     document.getElementById(
         "descripcionTitulo"
     ).textContent =
@@ -3198,6 +3209,7 @@ function contactarWhatsApp(
         );
 
 
+    if(window.fbq){ fbq('track','Contact',{content_name:direccion}); }
     window.open(
         url,
         "_blank"
@@ -3212,6 +3224,7 @@ function contactarWhatsApp(
 
 function abrirConsultaGeneral(){
 
+    if(window.fbq){ fbq('trackCustom','AbrirFormulario'); }
     abrirModal(
         "modalWhatsApp"
     );
@@ -3287,6 +3300,7 @@ function enviarConsultaGeneral(
         );
 
 
+    if(window.fbq){ fbq('track','Lead',{content_name:'Consulta general'}); }
     window.open(
         url,
         "_blank"
