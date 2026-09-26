@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Departamento amoblado | Alquiler temporario en Buenos Aires</title>
+<meta name="description" content="Departamentos amoblados en Buenos Aires para estadías de 3 a 12 meses. Estudiantes, médicos residentes y profesionales de todo el mundo.">
+<meta property="og:title" content="Tu hogar temporal en Buenos Aires">
+<meta property="og:description" content="Departamentos amoblados, listos para entrar a vivir. Contratos de 3 a 12 meses.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+<style>
+:root{--bg:#f6efe6;--card:#fff;--ink:#2b2420;--muted:#5b4f47;--accent:#b5562f;--wa:#1faa53;--line:#e6dccf}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Poppins,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;font-size:16px;padding-bottom:84px}
+img{display:block;max-width:100%}
+h1,h2{font-family:Lora,Georgia,serif;line-height:1.15}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+.kicker{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:600}
+section{padding:48px 0}
+h2{font-size:clamp(26px,4vw,36px);margin:8px 0 18px}
+.hero{padding:28px 0 8px}
+.hero h1{font-size:clamp(32px,6vw,54px);margin:10px 0 14px}
+.hero p.lead{font-size:clamp(16px,2.2vw,19px);color:var(--muted);max-width:640px}
+.who{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 22px}
+.who span{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:14px;font-weight:500}
+.hero-img{position:relative;border-radius:22px;overflow:hidden;aspect-ratio:4/3;max-height:560px;width:100%;background:#e9dfd2;cursor:zoom-in}
+.hero-img img{width:100%;height:100%;object-fit:cover}
+.badge{position:absolute;right:14px;top:14px;background:var(--accent);color:#fff;border-radius:16px;padding:10px 16px;font-weight:700;font-size:22px;line-height:1.1;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+.badge small{display:block;font-weight:400;font-size:12px;opacity:.9}
+.tag-live{position:absolute;left:14px;top:14px;background:#fff;color:var(--ink);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600}
+.tag-live::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--wa);margin-right:7px;vertical-align:1px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;background:var(--wa);color:#fff;text-decoration:none;font-weight:600;border-radius:14px;padding:15px 24px;font-size:17px;transition:transform .15s,background .15s;border:0;cursor:pointer;font-family:inherit}
+.btn:hover{background:#178f45;transform:translateY(-1px)}
+.btn svg{width:22px;height:22px;fill:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--ink)}
+.btn.ghost:hover{background:var(--ink);color:#fff}
+.btn.ig{background:linear-gradient(45deg,#f09433,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888)}
+.btn.ig:hover{filter:brightness(1.07)}
+.btn.cat{background:#2b2420}
+.btn.cat:hover{background:#000}
+.ctas{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.facts{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:22px}
+.fact{background:var(--card);border-radius:16px;padding:16px;border:1px solid var(--line)}
+.fact b{display:block;font-size:20px}
+.fact span{font-size:13px;color:var(--muted)}
+@media(min-width:760px){.facts{grid-template-columns:repeat(4,1fr)}}
+.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.gallery button{border:0;padding:0;background:#e9dfd2;cursor:zoom-in;border-radius:14px;overflow:hidden;aspect-ratio:1}
+.gallery img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
+.gallery button:hover img{transform:scale(1.04)}
+@media(min-width:760px){.gallery{grid-template-columns:repeat(4,1fr)}.gallery button:first-child{grid-column:span 2;grid-row:span 2}}
+.box{background:var(--card);border-radius:20px;padding:22px;border:1px solid var(--line)}
+.desc{white-space:pre-wrap;color:var(--ink);font-size:16px}
+.price-card{background:var(--ink);color:var(--bg);border-radius:24px;padding:26px}
+.price-card .big{font-size:clamp(36px,7vw,52px);font-weight:700;line-height:1}
+.price-card ul{list-style:none;margin-top:18px}
+.price-card li{padding:10px 0;border-bottom:1px solid rgba(255,255,255,.12);font-size:15px}
+.price-card li:last-child{border-bottom:0}
+.note{font-size:13px;opacity:.75;margin-top:12px}
+.steps{counter-reset:s;display:grid;gap:12px}
+@media(min-width:760px){.steps{grid-template-columns:repeat(3,1fr)}}
+.step{background:var(--card);border-radius:20px;padding:22px;border:1px solid var(--line)}
+.step::before{counter-increment:s;content:counter(s);display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--accent);color:#fff;font-weight:700;margin-bottom:10px}
+.step h3{font-size:17px;margin-bottom:6px}
+.step p{font-size:15px;color:var(--muted)}
+.help{margin-top:14px;background:#fbe9df;border-radius:18px;padding:18px 20px;font-size:15px}
+details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:600;list-style:none}
+summary::after{content:"+";float:right;color:var(--accent);font-size:20px;line-height:1}
+details[open] summary::after{content:"–"}
+details p{margin-top:8px;color:var(--muted);font-size:15px}
+.map{border-radius:20px;overflow:hidden;border:1px solid var(--line);height:300px;margin-top:14px}
+.map iframe{width:100%;height:100%;border:0}
+.final{text-align:center;background:var(--card);border-radius:28px;padding:36px 20px;border:1px solid var(--line)}
+.final p{color:var(--muted);max-width:520px;margin:0 auto}
+footer{text-align:center;font-size:13px;color:var(--muted);padding:26px 0 10px}
+footer a{color:var(--accent);font-weight:600;text-decoration:none}
+.sticky{position:fixed;left:0;right:0;bottom:0;background:rgba(246,239,230,.96);backdrop-filter:blur(8px);border-top:1px solid var(--line);padding:10px 16px;z-index:20}
+.sticky .wrap{display:flex;align-items:center;gap:12px;justify-content:space-between;padding:0}
+.sticky .p{font-size:13px;line-height:1.25}
+.sticky .p b{font-size:18px;display:block}
+.sticky .btn{padding:12px 18px;font-size:15px;flex-shrink:0}
+.lb{position:fixed;inset:0;background:rgba(15,10,8,.94);display:none;align-items:center;justify-content:center;z-index:50}
+.lb.on{display:flex}
+.lb img{max-width:94vw;max-height:84vh;border-radius:10px}
+.lb button{position:absolute;background:rgba(255,255,255,.12);border:0;color:#fff;font-size:30px;width:48px;height:48px;border-radius:50%;cursor:pointer}
+.lb .x{top:16px;right:16px;font-size:24px}
+.lb .prev{left:10px;top:50%;transform:translateY(-50%)}
+.lb .next{right:10px;top:50%;transform:translateY(-50%)}
+.lb .cap{position:absolute;bottom:18px;color:#fff;font-size:14px}
+.estado{min-height:70vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:16px;padding:40px 16px}
+.estado h1{font-size:clamp(26px,5vw,38px)}
+.estado p{color:var(--muted)}
+.hide{display:none!important}
+</style>
+<!-- Meta Pixel -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','1560475887837172');
+fbq('track','PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1560475887837172&ev=PageView&noscript=1"/></noscript>
+<!-- Fin Meta Pixel -->
+</head>
+<body>
+
+<!-- Estado: cargando / no encontrado -->
+<div class="estado" id="estado">
+  <h1 id="estadoTitulo">Cargando departamento…</h1>
+  <p id="estadoTexto">Un momento, estamos trayendo la información.</p>
+  <a class="btn cat hide" id="estadoBtn" href="DepartamentosAmoblados.html">🏠 Ver todos los departamentos</a>
+</div>
+
+<div id="pagina" class="hide">
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker" id="kicker">Alquiler temporario · Buenos Aires</div>
+    <h1>¿Vas a estar unos meses en Buenos Aires?</h1>
+    <p class="lead" id="lead"></p>
+    <div class="who"><span>🎓 Estudiantes universitarios</span><span>🩺 Médicos residentes</span><span>💼 Profesionales</span><span>🌎 Estadías de meses</span></div>
+    <div class="hero-img" id="heroImg">
+      <img id="heroFoto" alt="">
+      <div class="tag-live hide" id="tagLive">Ingreso inmediato</div>
+      <div class="badge" id="badge"></div>
+    </div>
+    <div class="facts" id="facts"></div>
+    <div class="ctas">
+      <a class="btn wa" href="#"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>Consultar por WhatsApp</a>
+      <a class="btn ghost" href="#fotos">Ver todas las fotos</a>
+      <a class="btn cat" href="DepartamentosAmoblados.html">🏠 Ver todos los departamentos</a>
+    </div>
+  </div>
+</header>
+
+<section id="fotos">
+  <div class="wrap">
+    <div class="kicker">Fotos</div>
+    <h2>Así es el departamento</h2>
+    <div class="gallery" id="gallery"></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="kicker">El departamento</div>
+    <h2>Llegás con la valija y empezás a vivir</h2>
+    <div class="box"><div class="desc" id="desc"></div></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="kicker">Precio</div>
+    <h2>Claro y sin letra chica</h2>
+    <div class="price-card">
+      <div class="big" id="precio"></div>
+      <ul id="incluye"></ul>
+      <p class="note">Los valores de expensas y servicios son aproximados y pueden variar mes a mes.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="kicker">Cómo entrar</div>
+    <h2>El ingreso es muy simple</h2>
+    <div class="steps">
+      <div class="step"><h3>Tu documentación</h3><p>DNI o pasaporte, y demostración de ingresos. Si sos estudiante, también la constancia de estudios.</p></div>
+      <div class="step"><h3>Tu contrato</h3><p>Contratos de 3 a 12 meses, según cada caso.</p></div>
+      <div class="step"><h3>Al firmar</h3><p>Primer mes por adelantado, un mes de depósito (se reintegra al finalizar; recomendamos que sea en dólares) y un mes de honorarios (gastos administrativos y de contrato).</p></div>
+    </div>
+    <div class="help"><b>¿No sabés cómo demostrar ingresos?</b> Te ayudamos. Puede demostrarlos el propio inquilino con información de su trabajo o actividad, o sus padres o familiares que lo ayudan, desde el interior del país o desde el exterior. Lo importante es acreditar que quien paga el alquiler es solvente.</div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="kicker">Ubicación</div>
+    <h2 id="ubicTitulo"></h2>
+    <div class="map"><iframe id="mapa" loading="lazy" title="Mapa de la ubicación"></iframe></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="kicker">Preguntas frecuentes</div>
+    <h2>Lo que más nos consultan</h2>
+    <details><summary>¿Cuándo puedo entrar?</summary><p>Escribinos con tu fecha de llegada y te confirmamos la disponibilidad.</p></details>
+    <details><summary>¿Cuánto tiempo me puedo quedar?</summary><p>Los contratos van de 3 a 12 meses, según cada caso.</p></details>
+    <details><summary>Vengo del exterior, ¿puedo alquilar?</summary><p>Sí. Con tu pasaporte y la demostración de ingresos, tuya o de tus padres o familiares, alcanza. Te ayudamos a armar la documentación.</p></details>
+    <details><summary>¿Qué tengo que pagar al firmar?</summary><p>El primer mes por adelantado, un mes de depósito (reintegrable al terminar la estadía) y un mes de honorarios.</p></details>
+    <details><summary>¿Tienen otros departamentos?</summary><p>Sí, en distintos barrios de la ciudad. <a href="DepartamentosAmoblados.html" class="cat-link" style="color:var(--accent);font-weight:600">Mirá todos en el catálogo</a>.</p></details>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="final">
+      <div class="kicker">Tu próximo hogar</div>
+      <h2>Tu próximo hogar en Buenos Aires</h2>
+      <p>Escribinos por WhatsApp contándonos cuándo llegás y por cuántos meses. Te respondemos con disponibilidad y los próximos pasos.</p>
+      <div class="ctas" style="justify-content:center">
+        <a class="btn wa" href="#"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>Consultar disponibilidad</a>
+        <a class="btn ig" href="https://www.instagram.com/alquilar.temporario/" target="_blank" rel="noopener">Ver más en Instagram</a>
+        <a class="btn cat" href="DepartamentosAmoblados.html">🏠 Ver todos los departamentos</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>Alquiler temporario en Buenos Aires<br><a href="https://www.instagram.com/alquilar.temporario/" target="_blank" rel="noopener" class="ig-link">@alquilar.temporario en Instagram</a></footer>
+
+<div class="sticky">
+  <div class="wrap">
+    <div class="p"><span id="stickyTit"></span><b id="stickyPrecio"></b></div>
+    <a class="btn wa" href="#"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>WhatsApp</a>
+  </div>
+</div>
+</div>
+
+<div class="lb" id="lb" role="dialog" aria-label="Galería de fotos">
+  <button class="x" aria-label="Cerrar">✕</button>
+  <button class="prev" aria-label="Anterior">‹</button>
+  <img id="lbimg" alt="">
+  <button class="next" aria-label="Siguiente">›</button>
+  <div class="cap" id="lbcap"></div>
+</div>
+
+<script>
+/* ===== CONFIGURACIÓN ===== */
+var CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ2E7ECUfY-ps4Ok0_1TJxTR1UPoYl-_ZYkGNlvhk9eZWHBslhsWtoCiTaPfCjQJ38kojq9pJBeoGep/pub?output=csv";
+var WHATSAPP_GENERAL = "5491168686694"; // se usa si el depto no tiene "Vendedor"
+
+/* ===== UTILIDADES ===== */
+function $(id){ return document.getElementById(id); }
+function slug(s){ return String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,""); }
+function celda(row, nombre){ var k = Object.keys(row).find(function(x){ return x.trim().toLowerCase() === nombre.toLowerCase(); }); return k ? String(row[k]||"").trim() : ""; }
+function titulo(s){ return String(s||"").toLowerCase().replace(/(^|\s)\S/g, function(c){ return c.toUpperCase(); }); }
+function esc(s){ return String(s||"").replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]; }); }
+function siNo(v){ v = String(v||"").toLowerCase().trim(); return ["si","sí","yes","true","1"].indexOf(v) > -1; }
+function driveId(url){ var m = url.match(/[?&]id=([\w-]+)/) || url.match(/\/d\/([\w-]+)/); return m ? m[1] : null; }
+function fotos(row){
+  var out = [];
+  ["Fotos","Fotos2","Fotos3"].forEach(function(c){
+    (celda(row,c).match(/https?:\/\/[^\s\])"',]+/g) || []).forEach(function(u){
+      var id = driveId(u);
+      var f = id ? {chica:"https://drive.google.com/thumbnail?id="+id+"&sz=w800", grande:"https://drive.google.com/thumbnail?id="+id+"&sz=w1600"} : {chica:u, grande:u};
+      if (!out.some(function(x){ return x.grande === f.grande; })) out.push(f);
+    });
+  });
+  return out;
+}
+function precioCorto(v){ var m = String(v).match(/(\d[\d.,]*)\s*(usd|u\$s|us\$|dolares|dólares)/i) || String(v).match(/(usd|u\$s|us\$)\s*(\d[\d.,]*)/i); if(!m) return v; var n = /\d/.test(m[1]) ? m[1] : m[2]; return "USD " + n; }
+
+function mostrarError(t, p){ $("estadoTitulo").textContent = t; $("estadoTexto").textContent = p; $("estadoBtn").classList.remove("hide"); }
+
+/* ===== CARGA ===== */
+var params = new URLSearchParams(location.search);
+var buscado = slug(params.get("d"));
+if (!buscado) {
+  mostrarError("No encontramos ese departamento", "Mirá todas las opciones disponibles en nuestro catálogo.");
+} else {
+  Papa.parse(CSV_URL, {
+    download:true, header:true, skipEmptyLines:true,
+    complete:function(res){
+      var row = res.data.find(function(r){ return celda(r,"Dirección") && slug(celda(r,"Dirección")) === buscado; });
+      if (!row) { mostrarError("Este departamento ya no está disponible", "Puede que ya se haya alquilado. Mirá las otras opciones en nuestro catálogo."); return; }
+      render(row);
+    },
+    error:function(){ mostrarError("No pudimos cargar el departamento", "Probá de nuevo en unos minutos o mirá el catálogo."); }
+  });
+}
+
+/* ===== ARMAR LA PÁGINA ===== */
+function render(row){
+  var dir = celda(row,"Dirección");
+  var barrio = titulo(celda(row,"barrio")) || "Buenos Aires";
+  var amb = (celda(row,"Ambientes").match(/\d+/)||[""])[0];
+  var tipo = amb === "1" ? "monoambiente" : amb ? "departamento de " + amb + " ambientes" : "departamento";
+  var tipoTit = amb === "1" ? "Monoambiente" : amb ? amb + " ambientes" : "Departamento";
+  var valor = celda(row,"Valor:") || celda(row,"Valor") || "Consultar";
+  var precio = precioCorto(valor);
+  var incluye = celda(row,"Incluye");
+  var desc = celda(row,"descripcion") || incluye || "";
+  var perro = siNo(celda(row,"perro?")), gato = siNo(celda(row,"gato?"));
+  var tel = (celda(row,"Vendedor") || WHATSAPP_GENERAL).replace(/\D/g,"");
+  var aptoM = desc.match(/apto\s+(\d+)\s+persona/i);
+  var inmediato = /inmediat/i.test(desc);
+  var fs = fotos(row);
+
+  document.title = tipoTit + " amoblado en " + barrio + " · " + precio + " | Alquiler temporario";
+  $("kicker").textContent = "Alquiler temporario · " + barrio + ", Buenos Aires";
+  $("lead").textContent = "Ayudamos a personas de todo el mundo a encontrar su próximo hogar temporal en la ciudad. Hoy te recomendamos este " + tipo + " amoblado en " + barrio + ", listo para entrar a vivir.";
+  $("badge").innerHTML = esc(precio) + (/usd/i.test(precio) ? "<small>por mes</small>" : "");
+  if (inmediato) $("tagLive").classList.remove("hide");
+
+  var facts = [
+    [tipoTit, "Amoblado y equipado"],
+    [aptoM ? aptoM[1] + (aptoM[1] === "1" ? " persona" : " personas") : barrio, aptoM ? "Capacidad" : "Barrio"],
+    ["3 a 12 meses", "Duración del contrato"],
+    [perro || gato ? "Acepta " + (perro && gato ? "mascotas" : perro ? "perro" : "gato") : "Sin mascotas", "Mascotas"]
+  ];
+  $("facts").innerHTML = facts.map(function(f){ return '<div class="fact"><b>'+esc(f[0])+'</b><span>'+esc(f[1])+'</span></div>'; }).join("");
+
+  // Fotos
+  if (fs.length) {
+    $("heroFoto").src = fs[0].grande; $("heroFoto").alt = tipoTit + " en " + dir;
+    $("gallery").innerHTML = fs.map(function(f,i){ return '<button data-i="'+i+'"><img src="'+esc(f.chica)+'" alt="Foto '+(i+1)+'" loading="lazy"></button>'; }).join("");
+  } else {
+    $("heroImg").classList.add("hide"); $("fotos").classList.add("hide");
+  }
+
+  $("desc").textContent = desc || "Escribinos y te contamos todos los detalles.";
+  $("precio").innerHTML = esc(precio) + (/usd/i.test(precio) ? ' <span style="font-size:18px;font-weight:400">/ mes</span>' : "");
+  var partes = incluye.split(/\.\s+|\n/).map(function(s){ return s.trim().replace(/\.$/,""); }).filter(Boolean);
+  $("incluye").innerHTML = partes.map(function(p){ return "<li>"+esc(p)+"</li>"; }).join("");
+
+  $("ubicTitulo").textContent = barrio + ": " + dir;
+  $("mapa").src = "https://www.google.com/maps?q=" + encodeURIComponent(dir + ", " + barrio + ", Buenos Aires") + "&output=embed";
+
+  $("stickyTit").textContent = tipoTit + " en " + barrio;
+  $("stickyPrecio").textContent = precio + (/usd/i.test(precio) ? "/mes" : "");
+
+  // WhatsApp
+  var msg = "¡Hola! Quiero más info sobre el " + tipo + " amoblado en " + dir + " (" + barrio + "). Mi nombre es ";
+  document.querySelectorAll("a.wa").forEach(function(a){
+    a.href = "https://wa.me/" + tel + "?text=" + encodeURIComponent(msg);
+    a.target = "_blank"; a.rel = "noopener";
+    a.addEventListener("click", function(){ if (window.fbq) fbq("track","Contact",{content_name:dir, content_ids:[buscado], content_type:"home_listing"}); });
+  });
+
+  // Píxel
+  if (window.fbq) fbq("track","ViewContent",{content_name:dir, content_ids:[buscado], content_type:"home_listing", content_category:"Alquiler temporario"});
+  document.querySelectorAll("a.cat, a.cat-link").forEach(function(a){ a.addEventListener("click", function(){ if (window.fbq) fbq("trackCustom","VerCatalogo"); }); });
+  document.querySelectorAll("a.ig, a.ig-link").forEach(function(a){ a.addEventListener("click", function(){ if (window.fbq) fbq("trackCustom","InstagramClick"); }); });
+
+  // Galería
+  var lb = $("lb"), im = $("lbimg"), cap = $("lbcap"), cur = 0, track = false;
+  function show(i){ if(!track && window.fbq){ fbq("trackCustom","VerFotos",{content_name:dir}); track = true; } cur = (i + fs.length) % fs.length; im.src = fs[cur].grande; cap.textContent = (cur+1) + " / " + fs.length; lb.classList.add("on"); }
+  document.querySelectorAll("#gallery button").forEach(function(b){ b.addEventListener("click", function(){ show(+b.dataset.i); }); });
+  $("heroImg").addEventListener("click", function(e){ if (fs.length && !e.target.closest(".badge")) show(0); });
+  lb.querySelector(".x").onclick = function(){ lb.classList.remove("on"); };
+  lb.querySelector(".prev").onclick = function(e){ e.stopPropagation(); show(cur-1); };
+  lb.querySelector(".next").onclick = function(e){ e.stopPropagation(); show(cur+1); };
+  lb.addEventListener("click", function(e){ if (e.target === lb) lb.classList.remove("on"); });
+  document.addEventListener("keydown", function(e){ if(!lb.classList.contains("on")) return; if(e.key==="Escape") lb.classList.remove("on"); if(e.key==="ArrowLeft") show(cur-1); if(e.key==="ArrowRight") show(cur+1); });
+  var sx = 0; lb.addEventListener("touchstart", function(e){ sx = e.touches[0].clientX; }); lb.addEventListener("touchend", function(e){ var dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 40) show(cur + (dx < 0 ? 1 : -1)); });
+
+  $("estado").classList.add("hide");
+  $("pagina").classList.remove("hide");
+}
+</script>
+</body>
+</html>
