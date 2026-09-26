@@ -8,6 +8,9 @@
 <meta property="og:title" content="Tu hogar temporal en Buenos Aires">
 <meta property="og:description" content="Departamentos amoblados, listos para entrar a vivir. Contratos de 3 a 12 meses.">
 <meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <style>
 :root{--bg:#f6efe6;--card:#fff;--ink:#2b2420;--muted:#5b4f47;--accent:#b5562f;--wa:#1faa53;--line:#e6dccf}
@@ -107,51 +110,6 @@ footer a{color:var(--accent);font-weight:600;text-decoration:none}
 .why p{font-size:15px;color:var(--muted)}
 .midcta{margin-top:18px;text-align:center}
 .trust{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 18px;margin-top:16px;font-size:14px;color:var(--muted)}
-
-/* ===== Estética del catálogo (modo oscuro) ===== */
-:root{--bg:#0b1120;--card:#111827;--ink:#f8fafc;--muted:#94a3b8;--accent:#22c55e;--wa:#16a34a;--line:#1e293b;--gold:#facc15}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:#e2e8f0}
-h1,h2{font-family:inherit;color:#f8fafc;letter-spacing:-.01em}
-.brand{text-align:center;padding:22px 16px 18px;border-bottom:1px solid var(--line)}
-.brand a{color:#f8fafc;font-weight:700;font-size:20px;text-decoration:none}
-.brand p{color:#64748b;font-size:14px;margin-top:4px}
-.urg{background:#111827;border-bottom:1px solid var(--line);color:#cbd5e1}
-.urg b{color:var(--gold)}
-.hero-img,.gallery button{background:#0f172a}
-.badge{background:var(--gold);color:#0b1120}
-.tag-live{background:#0b1120;color:#dcfce7;border:1px solid #22c55e}
-.who span{background:#111827;border-color:#334155;color:#cbd5e1}
-.fact,.box,.step,.why div,details,.final,.map{background:linear-gradient(145deg,#1e293b,#1b263a);border-color:#1e293b;box-shadow:0 10px 25px rgba(0,0,0,.35)}
-.fact b,.why b,.step h3,summary{color:#f8fafc}
-.prop{color:#f8fafc}
-.sub{color:#94a3b8}
-.chips span{background:#14532d;color:#dcfce7;border:1px solid #22c55e}
-.btn.ghost{color:#e2e8f0;border-color:#334155}
-.btn.ghost:hover{background:#1e293b;color:#fff}
-.btn.cat{background:#1e293b;border:1px solid #334155}
-.btn.cat:hover{background:#334155}
-.price-card{background:linear-gradient(145deg,#1e293b,#1b263a);border:1px solid #1e293b;color:#e2e8f0;box-shadow:0 10px 25px rgba(0,0,0,.35)}
-.price-card .big{color:var(--gold)}
-.ptable{width:100%;border-collapse:collapse;margin-top:18px}
-.ptable td{padding:12px 0;border-bottom:1px solid #334155;font-size:15px;vertical-align:top}
-.ptable tr:last-child td{border-bottom:0}
-.ptable td:last-child{text-align:right;font-weight:600}
-.ok{color:#4ade80}.aparte{color:#fbbf24}
-.total{margin-top:16px;background:#0b1120;border:1px solid #334155;border-radius:12px;padding:14px 16px;font-size:15px}
-.total b{color:var(--gold);font-size:18px}
-.help{background:#14532d33;border:1px solid #166534;color:#dcfce7}
-.pillars{display:grid;gap:12px}
-@media(min-width:760px){.pillars{grid-template-columns:repeat(3,1fr)}}
-.pillars div{background:#111827;border:1px solid #1e293b;border-radius:16px;padding:20px;text-align:center}
-.pillars .ic{font-size:30px}
-.pillars b{display:block;color:#22c55e;font-size:18px;margin:6px 0 4px}
-.pillars p{color:#94a3b8;font-size:14px}
-.sticky{background:rgba(11,17,32,.96);border-top-color:#1e293b}
-.sticky .p{color:#94a3b8}.sticky .p b{color:var(--gold)}
-footer{color:#64748b}
-footer a{color:#22c55e}
-details p a{color:#22c55e!important}
-.estado p{color:#94a3b8}
 </style>
 <!-- Meta Pixel -->
 <script>
@@ -172,7 +130,6 @@ fbq('track','PageView');
 </div>
 
 <div id="pagina" class="hide">
-<div class="brand"><a href="DepartamentosAmoblados.html">Alquilar.temporario 🏠</a><p>Alquilar.temporario es fácil, moderno y seguro</p></div>
 <div class="urg">🔥 <b>Alta demanda:</b> los departamentos amoblados se alquilan rápido. Consultá hoy.</div>
 <header class="hero">
   <div class="wrap">
@@ -216,18 +173,6 @@ fbq('track','PageView');
 
 <section>
   <div class="wrap">
-    <div class="kicker">Alquilar.temporario</div>
-    <h2>Alquilar temporario es fácil, moderno y seguro</h2>
-    <div class="pillars">
-      <div><div class="ic">✅</div><b>Fácil</b><p>Elegís el depto, nos escribís por WhatsApp y te guiamos paso a paso.</p></div>
-      <div><div class="ic">📱</div><b>Moderno</b><p>Fotos, precios y requisitos claros online. Consultás desde donde estés.</p></div>
-      <div><div class="ic">🔒</div><b>Seguro</b><p>Contrato firmado, depósito reintegrable y acompañamiento durante toda tu estadía.</p></div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
     <div class="kicker">Por qué elegirlo</div>
     <h2>Todo resuelto para que solo te ocupes de vivir</h2>
     <div class="why">
@@ -245,8 +190,8 @@ fbq('track','PageView');
     <h2 id="precioTit">Claro y sin letra chica</h2>
     <div class="price-card">
       <div class="big" id="precio"></div>
-      <table class="ptable" id="ptabla"></table><div class="total" id="ptotal"></div>
-      <p class="note">Los montos de expensas y servicios son aproximados y pueden variar mes a mes.</p>
+      <ul id="incluye"></ul>
+      <p class="note">Los valores de expensas y servicios son aproximados y pueden variar mes a mes.</p>
     </div>
   </div>
 </section>
@@ -301,7 +246,7 @@ fbq('track','PageView');
   </div>
 </section>
 
-<footer><b style="color:#f8fafc">Alquilar.temporario</b> es fácil, moderno y seguro<br><a href="https://www.instagram.com/alquilar.temporario/" target="_blank" rel="noopener" class="ig-link">@alquilar.temporario en Instagram</a></footer>
+<footer>Alquiler temporario en Buenos Aires<br><a href="https://www.instagram.com/alquilar.temporario/" target="_blank" rel="noopener" class="ig-link">@alquilar.temporario en Instagram</a></footer>
 
 <div class="sticky">
   <div class="wrap">
@@ -345,69 +290,6 @@ function fotos(row){
 }
 function precioCorto(v){ var m = String(v).match(/(\d[\d.,]*)\s*(usd|u\$s|us\$|dolares|dólares)/i) || String(v).match(/(usd|u\$s|us\$)\s*(\d[\d.,]*)/i); if(!m) return v; var n = /\d/.test(m[1]) ? m[1] : m[2]; return "USD " + n; }
 
-
-/* ===== PRECIO Y SERVICIOS ===== */
-function montoTxt(m){ return m.replace(/\s+/g,""); }
-function leerPrecio(v){
-  v = String(v||"");
-  var usd = /usd|u\$s|us\$|d[oó]lar/i.test(v);
-  var num = (v.match(/\d[\d.,]*/)||[""])[0].replace(/[.,]$/,"");
-  if (!num) return {txt: v || "Consultar", moneda:"", num:""};
-  if (usd) return {txt:"USD " + num, moneda:"USD", num:num};
-  var n = num.replace(/[.,]/g,"");
-  if (n.length >= 4) num = Number(n).toLocaleString("es-AR");
-  return {txt:"$ " + num, moneda:"ARS", num:num};
-}
-var SERVICIOS = [
-  {k:"Expensas", re:/expensa/},
-  {k:"Luz", re:/\bluz\b|electricidad/},
-  {k:"Gas", re:/\bgas\b/},
-  {k:"Agua", re:/\bagua\b|aysa/},
-  {k:"Wifi / Internet", re:/wi-?fi|internet/},
-  {k:"ABL / AGIP", re:/\babl\b|agip/},
-  {k:"Cable / TV", re:/\bcable\b/}
-];
-function analizarServicios(textos){
-  var frases = [];
-  textos.forEach(function(t){ String(t||"").split(/\n|\.(?=\s|$)|;/).forEach(function(f){ f = f.trim(); if (f) frases.push(f); }); });
-  return SERVICIOS.map(function(s){
-    var estado = "", monto = "";
-    frases.forEach(function(f){
-      var fl = f.toLowerCase(); var pos = fl.search(s.re); if (pos < 0) return;
-      var resto = f.slice(pos);
-      var m = resto.match(/(u\$s|usd|us\$)?\s*\$?\s*\d{1,3}(?:[.,]\d{3})+|\$\s*\d+/i);
-      if (m && !monto) monto = montoTxt(m[0]);
-      var exc = fl.search(/excepto|salvo|menos|sin\s+incluir/);
-      if (exc > -1 && exc < pos) { estado = "aparte"; return; }
-      if (/no\s+incluid|no\s+incluye|sin\s+incluir|a\s+cargo|aparte|se\s+paga|paga\s+el|según\s+consumo|segun\s+consumo|por\s+separado/.test(fl)) { if (!estado) estado = "aparte"; }
-      else if (/incluid|incluye|incluido|incluida|incluidos|incluidas|con\s+todo/.test(fl)) { if (!estado) estado = "incluido"; }
-    });
-    if (!estado && monto) estado = "aparte";
-    return {k:s.k, estado:estado, monto:monto};
-  }).filter(function(x){ return x.estado; });
-}
-function pintarPrecio(valor, textos){
-  var p = leerPrecio(valor);
-  var serv = analizarServicios(textos);
-  var filas = ['<tr><td>Alquiler mensual</td><td style="color:#facc15">' + esc(p.txt) + '</td></tr>'];
-  serv.forEach(function(s){
-    var der = s.estado === "incluido" ? '<span class="ok">✓ Incluido</span>' :
-      '<span class="aparte">' + (s.monto ? esc(s.monto) + (s.k==="Luz"||s.k==="Gas"||s.k==="Agua" ? "" : " aprox.") : (s.k==="Luz"||s.k==="Gas"||s.k==="Agua" ? "Según consumo" : "Aparte")) + '</span>';
-    filas.push('<tr><td>' + esc(s.k) + (s.estado==="aparte" ? ' <small style="color:#64748b">(a cargo del inquilino)</small>' : '') + '</td><td>' + der + '</td></tr>');
-  });
-  var exp = serv.find(function(s){ return s.k === "Expensas"; });
-  var resumen;
-  if (exp && exp.estado === "incluido") resumen = "Pagás <b>" + esc(p.txt) + "</b> por mes con expensas incluidas.";
-  else if (exp && exp.monto) resumen = "Pagás <b>" + esc(p.txt) + "</b> de alquiler + <b>" + esc(exp.monto) + "</b> de expensas aprox. por mes.";
-  else if (exp) resumen = "Pagás <b>" + esc(p.txt) + "</b> de alquiler + expensas por mes.";
-  else resumen = "Alquiler: <b>" + esc(p.txt) + "</b> por mes. Consultanos por expensas y servicios.";
-  var incl = serv.filter(function(s){ return s.estado==="incluido"; }).map(function(s){ return s.k; });
-  if (incl.length) resumen += "<br>✓ Incluye: " + esc(incl.join(", ")) + ".";
-  $("ptabla").innerHTML = filas.join("");
-  $("ptotal").innerHTML = resumen;
-  return {precio:p, exp:exp};
-}
-
 function mostrarError(t, p){ $("estadoTitulo").textContent = t; $("estadoTexto").textContent = p; $("estadoBtn").classList.remove("hide"); }
 
 /* ===== CARGA ===== */
@@ -435,7 +317,7 @@ function render(row){
   var tipo = amb === "1" ? "monoambiente" : amb ? "departamento de " + amb + " ambientes" : "departamento";
   var tipoTit = amb === "1" ? "Monoambiente" : amb ? amb + " ambientes" : "Departamento";
   var valor = celda(row,"Valor:") || celda(row,"Valor") || "Consultar";
-  var P = leerPrecio(valor); var precio = P.txt;
+  var precio = precioCorto(valor);
   var incluye = celda(row,"Incluye");
   var desc = celda(row,"descripcion") || incluye || "";
   var perro = siNo(celda(row,"perro?")), gato = siNo(celda(row,"gato?"));
@@ -448,7 +330,7 @@ function render(row){
   $("kicker").textContent = "Alquiler temporario · " + barrio + ", Buenos Aires";
   $("lead").textContent = "Ayudamos a personas de todo el mundo a encontrar su próximo hogar temporal en la ciudad. Hoy te recomendamos este " + tipo + " amoblado en " + barrio + ", listo para entrar a vivir.";
   $("propTit").textContent = tipoTit + " amoblado en " + barrio;
-  $("propSub").innerHTML = "<span>📍 " + esc(dir) + "</span><span>💰 " + esc(precio) + " por mes" + "</span>" + (aptoM ? "<span>👥 Apto " + aptoM[1] + (aptoM[1]==="1"?" persona":" personas") + "</span>" : "") + (inmediato ? "<span>🔑 Ingreso inmediato</span>" : "");
+  $("propSub").innerHTML = "<span>📍 " + esc(dir) + "</span><span>💰 " + esc(precio) + (/usd/i.test(precio) ? " por mes" : "") + "</span>" + (aptoM ? "<span>👥 Apto " + aptoM[1] + (aptoM[1]==="1"?" persona":" personas") + "</span>" : "") + (inmediato ? "<span>🔑 Ingreso inmediato</span>" : "");
   var txt = (desc + " " + incluye).toLowerCase();
   var extras = [["lavarropas","🧺 Lavarropas"],["wifi incluid","📶 Wifi incluido"],["aire","❄️ Aire acondicionado"],["balc","🌿 Balcón"],["pileta","🏊 Pileta"],["piscina","🏊 Pileta"],["cowork","💻 Co-working"],["co-work","💻 Co-working"],["parrilla","🔥 Parrilla"],["gimnasio","🏋️ Gimnasio"],["sum","🎉 SUM"],["cochera","🚗 Cochera"],["tv","📺 Smart TV"]];
   var vistos = [];
@@ -457,9 +339,9 @@ function render(row){
   $("chips").innerHTML = vistos.map(function(v){ return "<span>"+esc(v)+"</span>"; }).join("");
   $("fotosTit").textContent = "Así es tu " + tipo + " en " + barrio;
   $("descTit").textContent = "Todo lo que tenés que saber de " + dir;
-  $("precioTit").textContent = precio + " por mes, sin sorpresas";
+  $("precioTit").textContent = precio + (/usd/i.test(precio) ? " por mes, sin sorpresas" : "");
   $("finalTit").textContent = "¿Te imaginás viviendo en " + barrio + "?";
-  $("badge").innerHTML = esc(precio) + "<small>por mes</small>";
+  $("badge").innerHTML = esc(precio) + (/usd/i.test(precio) ? "<small>por mes</small>" : "");
   if (inmediato) $("tagLive").classList.remove("hide");
 
   var facts = [
@@ -479,17 +361,15 @@ function render(row){
   }
 
   $("desc").textContent = desc || "Escribinos y te contamos todos los detalles.";
-  $("precio").innerHTML = esc(precio) + ' <span style="font-size:18px;font-weight:400;color:#94a3b8">/ mes</span>';
-  var R = pintarPrecio(valor, [valor, incluye, desc]);
-  var expTxt = R.exp ? (R.exp.estado === "incluido" ? "expensas incluidas" : R.exp.monto ? "+ " + R.exp.monto + " expensas" : "+ expensas") : "";
-  $("badge").innerHTML = esc(precio) + "<small>por mes" + (expTxt ? " · " + esc(expTxt) : "") + "</small>";
-  var subP = document.querySelector("#propSub span:nth-child(2)"); if (subP && expTxt) subP.textContent += " (" + expTxt + ")";
+  $("precio").innerHTML = esc(precio) + (/usd/i.test(precio) ? ' <span style="font-size:18px;font-weight:400">/ mes</span>' : "");
+  var partes = incluye.split(/\.\s+|\n/).map(function(s){ return s.trim().replace(/\.$/,""); }).filter(Boolean);
+  $("incluye").innerHTML = partes.map(function(p){ return "<li>"+esc(p)+"</li>"; }).join("");
 
   $("ubicTitulo").textContent = barrio + ": " + dir;
   $("mapa").src = "https://www.google.com/maps?q=" + encodeURIComponent(dir + ", " + barrio + ", Buenos Aires") + "&output=embed";
 
   $("stickyTit").textContent = tipoTit + " en " + barrio;
-  $("stickyPrecio").textContent = precio + "/mes";
+  $("stickyPrecio").textContent = precio + (/usd/i.test(precio) ? "/mes" : "");
 
   // WhatsApp
   var msg = "¡Hola! Quiero más info sobre el " + tipo + " amoblado en " + dir + " (" + barrio + "). Mi nombre es ";
