@@ -97,6 +97,19 @@ footer a{color:var(--accent);font-weight:600;text-decoration:none}
 .estado h1{font-size:clamp(26px,5vw,38px)}
 .estado p{color:var(--muted)}
 .hide{display:none!important}
+.urg{background:var(--ink);color:#fff;text-align:center;font-size:14px;padding:9px 12px;font-weight:500}
+.urg b{color:#f4b28c}
+.prop{margin:18px 0 6px;font-size:clamp(24px,4.5vw,34px)}
+.sub{color:var(--muted);font-size:16px;display:flex;flex-wrap:wrap;gap:6px 14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chips span{background:#fbe9df;color:var(--accent);border-radius:999px;padding:6px 14px;font-size:14px;font-weight:600}
+.why{display:grid;gap:12px}
+@media(min-width:760px){.why{grid-template-columns:repeat(2,1fr)}}
+.why div{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px}
+.why b{display:block;font-size:17px;margin-bottom:4px}
+.why p{font-size:15px;color:var(--muted)}
+.midcta{margin-top:18px;text-align:center}
+.trust{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 18px;margin-top:16px;font-size:14px;color:var(--muted)}
 </style>
 <!-- Meta Pixel -->
 <script>
@@ -117,11 +130,15 @@ fbq('track','PageView');
 </div>
 
 <div id="pagina" class="hide">
+<div class="urg">🔥 <b>Alta demanda:</b> los departamentos amoblados se alquilan rápido. Consultá hoy.</div>
 <header class="hero">
   <div class="wrap">
     <div class="kicker" id="kicker">Alquiler temporario · Buenos Aires</div>
     <h1>¿Vas a estar unos meses en Buenos Aires?</h1>
     <p class="lead" id="lead"></p>
+    <h2 class="prop" id="propTit"></h2>
+    <div class="sub" id="propSub"></div>
+    <div class="chips" id="chips"></div>
     <div class="who"><span>🎓 Estudiantes universitarios</span><span>🩺 Médicos residentes</span><span>💼 Profesionales</span><span>🌎 Estadías de meses</span></div>
     <div class="hero-img" id="heroImg">
       <img id="heroFoto" alt="">
@@ -140,23 +157,37 @@ fbq('track','PageView');
 <section id="fotos">
   <div class="wrap">
     <div class="kicker">Fotos</div>
-    <h2>Así es el departamento</h2>
+    <h2 id="fotosTit">Así es el departamento</h2>
     <div class="gallery" id="gallery"></div>
+    <div class="midcta"><a class="btn wa" href="#">💬 Me gusta, quiero consultar</a></div>
   </div>
 </section>
 
 <section>
   <div class="wrap">
     <div class="kicker">El departamento</div>
-    <h2>Llegás con la valija y empezás a vivir</h2>
+    <h2 id="descTit">Llegás con la valija y empezás a vivir</h2>
     <div class="box"><div class="desc" id="desc"></div></div>
   </div>
 </section>
 
 <section>
   <div class="wrap">
+    <div class="kicker">Por qué elegirlo</div>
+    <h2>Todo resuelto para que solo te ocupes de vivir</h2>
+    <div class="why">
+      <div><b>🧳 Listo para entrar</b><p>Amoblado y equipado. No comprás nada: llegás con la valija.</p></div>
+      <div><b>📄 Requisitos simples</b><p>DNI o pasaporte y demostración de ingresos. Te ayudamos si venís del exterior o de otra provincia.</p></div>
+      <div><b>📅 Contrato flexible</b><p>De 3 a 12 meses: ideal para una cursada, una residencia o un proyecto de trabajo.</p></div>
+      <div><b>💬 Atención directa</b><p>Hablás con nosotros por WhatsApp, sin vueltas, y te acompañamos hasta que entrás.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
     <div class="kicker">Precio</div>
-    <h2>Claro y sin letra chica</h2>
+    <h2 id="precioTit">Claro y sin letra chica</h2>
     <div class="price-card">
       <div class="big" id="precio"></div>
       <ul id="incluye"></ul>
@@ -202,13 +233,15 @@ fbq('track','PageView');
   <div class="wrap">
     <div class="final">
       <div class="kicker">Tu próximo hogar</div>
-      <h2>Tu próximo hogar en Buenos Aires</h2>
+      <h2 id="finalTit">Tu próximo hogar en Buenos Aires</h2>
       <p>Escribinos por WhatsApp contándonos cuándo llegás y por cuántos meses. Te respondemos con disponibilidad y los próximos pasos.</p>
       <div class="ctas" style="justify-content:center">
         <a class="btn wa" href="#"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>Consultar disponibilidad</a>
         <a class="btn ig" href="https://www.instagram.com/alquilar.temporario/" target="_blank" rel="noopener">Ver más en Instagram</a>
         <a class="btn cat" href="DepartamentosAmoblados.html">🏠 Ver todos los departamentos</a>
       </div>
+      <div class="trust"><span>✓ Respuesta rápida</span><span>✓ Sin compromiso</span><span>✓ Te ayudamos con los papeles</span></div>
+      <p style="margin-top:14px;font-size:14px">⏳ Cuando se alquila, lo bajamos del catálogo. Si te gusta, no esperes.</p>
     </div>
   </div>
 </section>
@@ -296,6 +329,18 @@ function render(row){
   document.title = tipoTit + " amoblado en " + barrio + " · " + precio + " | Alquiler temporario";
   $("kicker").textContent = "Alquiler temporario · " + barrio + ", Buenos Aires";
   $("lead").textContent = "Ayudamos a personas de todo el mundo a encontrar su próximo hogar temporal en la ciudad. Hoy te recomendamos este " + tipo + " amoblado en " + barrio + ", listo para entrar a vivir.";
+  $("propTit").textContent = tipoTit + " amoblado en " + barrio;
+  $("propSub").innerHTML = "<span>📍 " + esc(dir) + "</span><span>💰 " + esc(precio) + (/usd/i.test(precio) ? " por mes" : "") + "</span>" + (aptoM ? "<span>👥 Apto " + aptoM[1] + (aptoM[1]==="1"?" persona":" personas") + "</span>" : "") + (inmediato ? "<span>🔑 Ingreso inmediato</span>" : "");
+  var txt = (desc + " " + incluye).toLowerCase();
+  var extras = [["lavarropas","🧺 Lavarropas"],["wifi incluid","📶 Wifi incluido"],["aire","❄️ Aire acondicionado"],["balc","🌿 Balcón"],["pileta","🏊 Pileta"],["piscina","🏊 Pileta"],["cowork","💻 Co-working"],["co-work","💻 Co-working"],["parrilla","🔥 Parrilla"],["gimnasio","🏋️ Gimnasio"],["sum","🎉 SUM"],["cochera","🚗 Cochera"],["tv","📺 Smart TV"]];
+  var vistos = [];
+  extras.forEach(function(e){ var re = e[0]==="sum"||e[0]==="tv" ? new RegExp("\\b"+e[0]+"\\b") : null; if ((re ? re.test(txt) : txt.indexOf(e[0]) > -1) && vistos.indexOf(e[1]) < 0) vistos.push(e[1]); });
+  if (perro || gato) vistos.push("🐾 Acepta mascotas");
+  $("chips").innerHTML = vistos.map(function(v){ return "<span>"+esc(v)+"</span>"; }).join("");
+  $("fotosTit").textContent = "Así es tu " + tipo + " en " + barrio;
+  $("descTit").textContent = "Todo lo que tenés que saber de " + dir;
+  $("precioTit").textContent = precio + (/usd/i.test(precio) ? " por mes, sin sorpresas" : "");
+  $("finalTit").textContent = "¿Te imaginás viviendo en " + barrio + "?";
   $("badge").innerHTML = esc(precio) + (/usd/i.test(precio) ? "<small>por mes</small>" : "");
   if (inmediato) $("tagLive").classList.remove("hide");
 
