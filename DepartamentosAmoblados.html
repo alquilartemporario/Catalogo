@@ -543,6 +543,26 @@ header p{
 }
 
 
+/* + INFO */
+
+.btn-info{
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:#b5562f;
+    border:1px solid #d9733f;
+
+    text-decoration:none;
+    text-align:center;
+}
+
+.btn-info:hover{
+    background:#c9612f;
+}
+
+
 /* FOTOS */
 
 .btn-fotos{
@@ -2846,6 +2866,27 @@ function crearCard(
             <div class="card-botones">
 
 
+                <a
+                    class="card-btn btn-info"
+
+                    href="depto.html?d=${encodeURIComponent(
+                        slugDepto(
+                            direccion
+                        )
+                    )}"
+
+                    onclick="if(window.fbq){ fbq('trackCustom','VerInfo',{content_name:this.dataset.dir}); }"
+
+                    data-dir="${escapeHTML(
+                        direccion
+                    )}"
+                >
+
+                    ➕ Info
+
+                </a>
+
+
                 <button
                     class="card-btn btn-fotos"
 
@@ -3593,6 +3634,26 @@ document.addEventListener(
 
     }
 );
+
+
+/* =========================================================
+   SLUG (link a la página de cada depto)
+========================================================= */
+
+function slugDepto(
+    valor
+){
+
+    return String(
+        valor || ""
+    )
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+}
 
 
 /* =========================================================
