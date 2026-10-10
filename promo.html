@@ -39,6 +39,12 @@ function slug(v){return String(v||"").normalize("NFD").replace(/[̀-ͯ]/g,"").to
 function esc(v){return String(v||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function fotos(r){const o=[];["Fotos","Fotos2","Fotos3"].forEach(c=>(cel(r,c).match(/https?:\/\/[^\s\])"',]+/g)||[]).forEach(u=>{const m=u.match(/[?&]id=([\w-]+)/)||u.match(/\/file\/d\/([\w-]+)/)||u.match(/\/d\/([\w-]+)/);const f=m?"https://drive.google.com/thumbnail?id="+m[1]+"&sz=w1600":u;if(!o.includes(f))o.push(f)}));return o}
 function tc(v){return String(v||"").toLowerCase().replace(/(^|\s)\S/g,m=>m.toUpperCase())}
+const MESES=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+function disponible(...txts){const s=txts.join(" \n ");if(/inmediat/i.test(s))return{ya:true,txt:"Ingreso inmediato"};
+  const m=s.match(/disp\w*[^\d\n]{0,25}?(\d{1,2})\s*[\/\-.]\s*(\d{1,2})(?:\s*[\/\-.]\s*\d{2,4})?/i)||s.match(/(?:desde|a partir del?)\s+(?:el\s+)?(\d{1,2})\s*[\/\-.]\s*(\d{1,2})/i);
+  if(m){const d=+m[1],mo=+m[2];if(d>=1&&d<=31&&mo>=1&&mo<=12)return{ya:false,txt:"Disponible desde el "+d+" de "+MESES[mo-1]}}
+  const m2=s.match(/disp\w*[^\n]{0,15}?(\d{1,2})\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)/i);
+  if(m2)return{ya:false,txt:"Disponible desde el "+(+m2[1])+" de "+m2[2].toLowerCase()};return null}
 function amb(v){const m=String(v).match(/\d+/);return m?(m[0]==="1"?"1 ambiente":m[0]+" ambientes"):""}
 /* Lee un precio tipo "USD 850", "u$s 850 con expensas", "$450.000", "850 dólares" */
 function precio(v){const s=String(v||"").toLowerCase();const m=s.match(/\d[\d.,]*/);if(!m)return null;
@@ -62,14 +68,15 @@ cargar(0);
 function render(r,rows){
   const dir=cel(r,"Dirección"),barrio=tc(cel(r,"barrio"))||"Buenos Aires",ambT=amb(cel(r,"Ambientes")),valorTxt=cel(r,"Valor:"),incl=cel(r,"Incluye");
   const desc=cel(r,"descripcion")||cel(r,"descripción");const F=fotos(r);const tel=cel(r,"Vendedor").replace(/\D/g,"")||WA_GENERAL;
-  const perro=esSi(cel(r,"perro?")),gato=esSi(cel(r,"gato?"));
+  const perro=esSi(cel(r,"perro?")),gato=esSi(cel(r,"gato?"));const D=disponible(cel(r,"descripcion"),cel(r,"descripción"),incl,cel(r,"Disponible"));
+  const mascotaTxt=perro&&gato?"Sí, acepta perros y gatos.":perro?"Sí, acepta perro. No acepta gato.":gato?"Sí, acepta gato. No acepta perro.":"No, este departamento no acepta mascotas.";
   const P=precio(valorTxt),A=precio(cel(r,"Armado")||ARMADO_CONTRATO);const ok=P&&A&&P.c===A.c&&P.n>A.n;
   const mes=P?fmt(P):"1 mes",arm=A?fmt(A):ARMADO_CONTRATO,ahorro=ok?fmt({n:P.n-A.n,c:P.c}):"";
   const totH=ok?fmt({n:P.n*3,c:P.c}):"",totP=ok?fmt({n:P.n*2+A.n,c:P.c}):"";
   const otros=rows.filter(x=>x!==r&&esSi(cel(x,"PROMO")));
   const wa=m=>"https://wa.me/"+tel+"?text="+encodeURIComponent(m);
-  const wv=wa("¡Hola! Vi el depto de "+dir+" ("+barrio+") con la promo de solo el armado del contrato. ¿Puedo coordinar una visita?");
-  const wr=wa("¡Hola! Quiero reservar el depto de "+dir+" ("+barrio+") con la promo de solo el armado del contrato. ¿Qué necesito?");
+  const wv=wa("¡Hola! Vi el depto de "+dir+" ("+barrio+") con la promo de ingreso. ¿Puedo coordinar una visita?");
+  const wr=wa("¡Hola! Quiero reservar el depto de "+dir+" ("+barrio+") con la promo de ingreso. ¿Qué necesito?");
   const ico='<svg viewBox="0 0 24 24" fill="currentColor"><use href="#wa"/></svg>';
   const maps="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(dir+", "+barrio+", Buenos Aires");
   const parts=incl.split(/\n|\.(?!\d)|;|•|,\s*(?=(?:no|sin)\s)/i).map(s=>s.trim()).filter(Boolean);const neg=parts.filter(s=>/^(no |sin )/i.test(s)||/\bno tiene\b/i.test(s));const items=parts.filter(s=>!neg.includes(s)).slice(0,8);
@@ -78,19 +85,19 @@ function render(r,rows){
   const gal=G.map((f,i)=>'<button class="'+cls(i)+'" data-i="'+i+'"><img loading="lazy" src="'+esc(f)+'" alt="Foto '+(i+1)+'"></button>').join("");
   const ocards=otros.slice(0,3).map(x=>{const fx=fotos(x)[0],dx=cel(x,"Dirección"),px=precio(cel(x,"Valor:"));return '<a class="oc rv" href="promo.html?d='+encodeURIComponent(slug(dx))+'">'+(fx?'<img loading="lazy" src="'+esc(fx.replace("sz=w1600","sz=w700"))+'" alt="'+esc(dx)+'">':'<div class="ni"></div>')+'<div><small>'+esc(tc(cel(x,"barrio"))||"Promo")+'</small><b>'+esc(amb(cel(x,"Ambientes"))||"Departamento")+'</b><span>📍 '+esc(dx)+'</span>'+(px?'<span class="pr">'+fmt(px)+' / mes</span>':'')+'<em>Ver más →</em></div></a>'}).join("");
   document.title=(ambT||"Depto")+" en "+barrio+" · "+dir+" | Alquilar Temporario";
-  $('#navDir').textContent=dir+", "+barrio;
+  $('#navDir').textContent=dir+", "+barrio;$('.status b').textContent=D?(D.ya?"Ingreso inmediato":D.txt):"Disponible";
   $('#app').innerHTML=`
 <header class="hero"><div class="hero-bg" style="background-image:url('${esc(F[0]||"")}')"></div><div class="wrap">
   <a class="morelink" href="promos.html">← Ver más deptos en promo</a>
   <span class="pill"><i></i>ALQUILER TEMPORARIO · ${esc(barrio.toUpperCase())}</span>
   <h1>Tu depto en ${esc(barrio)}, <span>listo para entrar.</span></h1>
   <p class="sub">${esc(ambT?ambT+", amoblado y equipado":"Departamento amoblado y equipado")} en <b>${esc(dir)}</b>. Llegás con la valija y empezás a vivir.</p>
-  <div class="chips"><span class="chip acc">Promo de ingreso</span>${ambT?'<span class="chip">'+esc(ambT)+'</span>':''}${perro?'<span class="chip">🐶 Acepta perro</span>':''}${gato?'<span class="chip">🐱 Acepta gato</span>':''}<span class="chip">${esc(dir)}</span></div>
+  <div class="chips">${D?'<span class="chip acc">'+(D.ya?"🔑 Ingreso inmediato":"📅 "+D.txt)+'</span>':''}<span class="chip${D?'':' acc'}">Promo de ingreso</span>${ambT?'<span class="chip">'+esc(ambT)+'</span>':''}${perro?'<span class="chip">🐶 Acepta perro</span>':''}${gato?'<span class="chip">🐱 Acepta gato</span>':''}<span class="chip">${esc(dir)}</span></div>
   <div class="cta-row"><a class="btn btn-wa" href="${wv}" target="_blank" rel="noopener">${ico}Coordinar visita</a><a class="btn btn-ghost" href="#depto">Ver el depto</a></div>
-  <p class="scarcity"><span class="dot"></span><span>Disponible · Más abajo te mostramos cómo entrar pagando <b style="color:#fff">${ahorro?ahorro+" menos":"menos"}</b></span></p>
+  <p class="scarcity"><span class="dot"></span><span>${D?esc(D.txt):"Disponible"} · Más abajo te mostramos cómo entrar pagando <b style="color:#fff">${ahorro?ahorro+" menos":"menos"}</b></span></p>
 </div>
 <a class="scroll-hint" href="#depto"><i></i>Deslizá</a>
-<aside class="hcard"><div class="l">Valor mensual</div><div class="a">${P?fmt(P):"Consultar"} <small>/ mes</small></div><p>${esc(valorTxt||"")}</p><hr><div class="s"><span>Para entrar, solo el armado de contrato</span></div>${ahorro?'<div class="s" style="margin-top:6px"><span>Ahorrás</span><b>'+ahorro+'</b></div>':''}</aside>
+<aside class="hcard"><div class="l">Valor mensual</div><div class="a">${P?fmt(P):"Consultar"} <small>/ mes</small></div><p>${esc(valorTxt||"")}</p><hr><div class="s"><span>Mes de honorarios o comisión</span><b><s style="color:var(--mut)">${mes}</s></b></div><div class="s" style="margin-top:4px"><span style="color:var(--mut)">Solo se abonan ${esc(arm)} por el armado de contrato</span></div>${ahorro?'<div class="s" style="margin-top:6px"><span>Ahorrás</span><b>'+ahorro+'</b></div>':''}</aside>
 </header>
 <div class="wrap"><div class="facts rv">
   <div class="fact"><b>${esc(ambT||"Amoblado")}</b><span>amoblado y equipado</span></div>
@@ -109,7 +116,7 @@ function render(r,rows){
       <span class="kicker">Lo que incluye</span>
       <h2>Llegás con la valija y <em>empezás a vivir.</em></h2>
       ${desc?'<p class="lead" style="white-space:pre-wrap">'+esc(desc)+'</p>':'<p class="lead">Todo listo para instalarte: sin comprar muebles, sin contratar nada, sin vueltas.</p>'}
-      <ul class="checks">${(items.length?items:["Amoblado y equipado"]).map(s=>'<li><span>'+esc(s.charAt(0).toUpperCase()+s.slice(1))+'</span></li>').join("")}${perro||gato?'<li><span>'+(perro&&gato?"Acepta perros y gatos":perro?"Acepta perro":"Acepta gato")+'</span></li>':''}</ul>
+      <ul class="checks">${(items.length?items:["Amoblado y equipado"]).map(s=>'<li><span>'+esc(s.charAt(0).toUpperCase()+s.slice(1))+'</span></li>').join("")}${perro||gato?'<li><span>'+(perro&&gato?"Acepta perros y gatos":perro?"Acepta perro":"Acepta gato")+'</span></li>':''}${D?'<li><span>'+esc(D.txt)+'</span></li>':''}</ul>
       ${neg.length?'<div class="ac"><div class="i">ℹ️</div><div><b>A tener en cuenta</b><span>'+neg.map(s=>esc(s.charAt(0).toUpperCase()+s.slice(1))).join(" · ")+'</span></div></div>':''}
       <div class="cta-row"><a class="btn btn-wa" href="${wv}" target="_blank" rel="noopener">${ico}Quiero verlo en persona</a><a class="btn btn-ghost" href="${maps}" target="_blank" rel="noopener">📍 Ver en el mapa</a></div>
     </div>
@@ -121,21 +128,20 @@ function render(r,rows){
 <section class="save" id="ahorro"><div class="wrap center">
   <span class="kicker rv">Beneficio de ingreso</span>
   <h2 class="rv">Y entrar te cuesta <em>menos.</em></h2>
-  <p class="lead rv">Normalmente, al firmar se paga un mes de gastos administrativos, de contrato y comisión inmobiliaria. Para este departamento <b>solo se paga el armado del contrato: ${esc(arm)}</b>.</p>
+  <p class="lead rv">Normalmente, al firmar se paga un mes de honorarios o comisión. En este departamento ese mes no se cobra: <b>solo se abonan ${esc(arm)} por el armado de contrato</b>. El primer mes y el depósito se pagan igual.</p>
   <div class="compare" style="text-align:left">
     <div class="cbox rv"><h3>Ingreso habitual</h3>
       <div class="row"><span>Primer mes por adelantado</span><span>${mes}</span></div>
       <div class="row"><span>Depósito en garantía<small>Se devuelve al finalizar</small></span><span>${mes}</span></div>
-      <div class="row"><span>Gastos administrativos, de contrato y comisión inmobiliaria (1 mes)</span><span>${mes}</span></div>
+      <div class="row"><span>Mes de honorarios o comisión</span><span>${mes}</span></div>
       ${ok?'<div class="total"><span>Total para entrar</span><b>'+totH+'</b></div>':''}</div>
     <div class="cbox win rv"><span class="tag">BENEFICIO</span><h3>Para este depto</h3>
       <div class="row"><span>Primer mes por adelantado</span><span>${mes}</span></div>
       <div class="row"><span>Depósito en garantía<small>Se devuelve al finalizar</small></span><span>${mes}</span></div>
-      <div class="row"><span>Gastos administrativos, de contrato y comisión inmobiliaria (1 mes)</span><span><s>${mes}</s> <span class="free">No se pagan</span></span></div>
-      <div class="row"><span>Armado del contrato<small>Es lo único que se paga</small></span><span>${esc(arm)}</span></div>
+      <div class="row"><span>Mes de honorarios o comisión<small>Solo se abonan ${esc(arm)} por el armado de contrato</small></span><span><s>${mes}</s> <span class="free">${esc(arm)}</span></span></div>
       ${ok?'<div class="total"><span>Total para entrar</span><b>'+totP+'</b></div>':''}</div>
   </div>
-  <div class="big-save rv"><p>Te quedan en el bolsillo</p><strong>${ahorro||"1 mes − armado"}</strong><p>para disfrutar la ciudad, una escapada o cualquier necesidad.</p></div>
+  <div class="big-save rv"><p>Te quedan en el bolsillo</p><strong>${ahorro||"Casi 1 mes"}</strong><p>para disfrutar la ciudad, una escapada o cualquier necesidad.</p></div>
   <div style="margin-top:34px" class="rv"><a class="btn btn-acc" href="${wr}" target="_blank" rel="noopener">Quiero reservarlo</a></div>
 </div></section>
 
@@ -143,7 +149,7 @@ function render(r,rows){
   <div class="center"><span class="kicker rv">Precio claro, sin sorpresas</span><h2 class="rv">Un solo pago <em>mensual.</em></h2></div>
   <div class="prices" style="grid-template-columns:1fr;max-width:640px;margin-inline:auto">
     <div class="pcard main rv"><span class="lbl">★ Valor mensual</span><div class="amt">${P?fmt(P):"Consultar"} <small>/ mes</small></div><p>${esc(valorTxt||"Consultanos el valor por WhatsApp.")}</p>
-      <ul><li>Amoblado y equipado</li><li>Para entrar, solo el armado de contrato: ${esc(arm)}</li><li>Contratos de 3 a 12 meses</li></ul></div>
+      <ul><li>Amoblado y equipado</li><li>Sin mes de honorarios o comisión: solo se abonan ${esc(arm)} por el armado de contrato</li>${D?"<li>"+esc(D.txt)+"</li>":""}<li>Contratos de 3 a 12 meses</li></ul></div>
   </div>
 </div></section>
 
@@ -162,9 +168,10 @@ function render(r,rows){
 <section style="padding-top:0"><div class="wrap">
   <div class="center"><span class="kicker rv">Preguntas frecuentes</span><h2 class="rv">Todo lo que querés saber</h2></div>
   <div class="faq">
-    <details class="rv"><summary>¿Qué tengo que pagar para entrar?</summary><p>El primer mes por adelantado${P?" ("+mes+")":""}, el depósito en garantía (que se devuelve al finalizar) y el armado del contrato de ${esc(arm)}. Los gastos administrativos, de contrato y comisión inmobiliaria (1 mes) no se pagan.</p></details>
+    <details class="rv"><summary>¿Qué tengo que pagar para entrar?</summary><p>El primer mes por adelantado${P?" ("+mes+")":""}, el depósito en garantía${P?" ("+mes+")":""}, que se devuelve al finalizar, y el armado de contrato. No se cobra el mes de honorarios o comisión: solo se abonan ${esc(arm)} por el armado de contrato.${ok?" En total: "+totP+".":""}</p></details>
+    <details class="rv"><summary>¿Desde cuándo está disponible?</summary><p>${D?(D.ya?"Está disponible para ingreso inmediato.":esc(D.txt)+"."):"Consultanos la fecha de ingreso por WhatsApp."}</p></details>
     <details class="rv"><summary>¿Hasta cuándo vale el beneficio?</summary><p>Vale hasta que el departamento se alquile.</p></details>
-    <details class="rv"><summary>¿Acepta mascotas?</summary><p>${perro&&gato?"Sí, acepta perros y gatos.":perro?"Acepta perro.":gato?"Acepta gato.":"Consultanos por WhatsApp según tu caso."}</p></details>
+    <details class="rv"><summary>¿Acepta mascotas?</summary><p>${mascotaTxt}</p></details>
     <details class="rv"><summary>Estoy en otro país, ¿puedo reservarlo?</summary><p>Sí. Escribinos por WhatsApp, te mandamos fotos, video y toda la información, y coordinamos la reserva para que llegues y entres directo.</p></details>
   </div>
 </div></section>
@@ -180,7 +187,7 @@ ${otros.length?`<section id="otros" style="padding-top:0"><div class="wrap cente
 <section class="final" id="final"><div class="final-bg" style="background-image:url('${esc(F[2]||F[0]||"")}')"></div><div class="wrap">
   <span class="kicker">${esc(dir)} · ${esc(barrio)}</span>
   <h2>Tu próximo hogar en ${esc(barrio)},<br><em>listo para entrar.</em></h2>
-  <p class="lead" style="margin:0 auto 32px">Está disponible. Escribinos y coordinamos para que lo conozcas.</p>
+  <p class="lead" style="margin:0 auto 32px">${D?(D.ya?"Disponible para ingreso inmediato.":esc(D.txt)+"."):"Está disponible."} Escribinos y coordinamos para que lo conozcas.</p>
   <div class="cta-row" style="justify-content:center"><a class="btn btn-wa" href="${wv}" target="_blank" rel="noopener">${ico}Coordinar visita</a><a class="btn btn-acc" href="${wr}" target="_blank" rel="noopener">Reservarlo</a></div>
   <div><a class="handle" href="https://www.instagram.com/alquilar.temporario/" target="_blank" rel="noopener">@alquilar.temporario</a></div>
   <div style="margin-top:22px"><a class="btn btn-ghost" href="promos.html">🔥 Ver más deptos en promo</a></div>
