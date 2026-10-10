@@ -1,191 +1,96 @@
 <!doctype html>
 <html lang="es-AR">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Depto en promo | Alquilar Temporario</title>
-<meta name="description" content="Departamento amoblado en Buenos Aires. Promo: solo pagás el armado del contrato.">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Deptos en promo | Alquilar Temporario</title>
+<meta name="description" content="Departamentos amoblados en Buenos Aires con promo: mudate sin complicaciones y sin pagar de más.">
 <meta name="theme-color" content="#0c0b10">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <style>
-:root{--bg:#0c0b10;--bg2:#14121b;--card:#1a1724;--line:rgba(255,255,255,.09);--mut:#b9b5c6;--acc:#F5B841;--acc2:#ffd27a;--vio:#2b1d47;--ok:#3ddc97;--r:22px;--wa:#25D366}
-*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
-body{background:var(--bg);color:#fff;font-family:Poppins,system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-img{display:block;max-width:100%}a{color:inherit;text-decoration:none}
-.wrap{width:min(1120px,100% - 32px);margin-inline:auto}section{padding:76px 0}
-.kicker{display:inline-flex;align-items:center;gap:10px;font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--acc)}
-.kicker::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--acc);box-shadow:0 0 0 4px rgba(245,184,65,.18)}
-h1,h2,h3{line-height:1.08;letter-spacing:-.02em}h2{font-size:clamp(30px,5vw,46px);font-weight:800;margin:14px 0}h2 em{font-style:normal;color:var(--acc)}
-.lead{color:var(--mut);font-size:clamp(16px,2.2vw,19px);max-width:660px}.center{text-align:center}.center .lead{margin-inline:auto}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:16px 26px;border-radius:999px;font-weight:700;font-size:16px;transition:transform .2s;cursor:pointer;border:0;font-family:inherit}
-.btn:hover{transform:translateY(-2px)}.btn svg{width:21px;height:21px;flex:none}
-.btn-acc{background:var(--acc);color:#16120a;box-shadow:0 10px 30px -8px rgba(245,184,65,.6)}
-.btn-wa{background:var(--wa);color:#05290f;box-shadow:0 10px 30px -8px rgba(37,211,102,.55)}
-.btn-ghost{background:rgba(255,255,255,.08);color:#fff;border:1px solid var(--line)}
-.prog{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--acc),var(--acc2));z-index:70}
-.nav{position:sticky;top:0;z-index:50;background:rgba(12,11,16,.8);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
-.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;height:62px}
-.brand{display:flex;align-items:center;gap:10px;font-weight:700}.brand i{width:30px;height:30px;border-radius:9px;background:var(--acc);display:grid;place-items:center;color:#16120a;font-style:normal;font-weight:800;font-size:14px}
-.nav .btn{padding:10px 18px;font-size:14px}.back{color:var(--mut);font-size:14px}
-.hero{position:relative;min-height:min(88vh,820px);display:flex;align-items:flex-end;padding:0 0 100px;overflow:hidden}
-.hero-bg{position:absolute;inset:0;background:#1a1724 center 55%/cover;transform:scale(1.06);animation:kb 18s ease-in-out infinite alternate}
-@keyframes kb{to{transform:scale(1.14)}}
-.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,11,16,.45),rgba(12,11,16,.35) 30%,rgba(12,11,16,.88) 68%,var(--bg))}
-.hero .wrap{position:relative;z-index:2}
-.pill{display:inline-flex;align-items:center;gap:10px;background:rgba(15,13,20,.6);backdrop-filter:blur(8px);border:1px solid var(--line);padding:8px 16px;border-radius:999px;font-size:13px;font-weight:500;letter-spacing:.06em;text-transform:uppercase}.pill i{width:8px;height:8px;border-radius:50%;background:var(--acc)}
-.hero h1{font-size:clamp(38px,7.5vw,80px);font-weight:800;margin:20px 0 14px;max-width:900px}.hero h1 span{color:var(--acc)}
-.sub{font-size:clamp(17px,2.4vw,21px);color:#e9e6f2;max-width:640px;margin-bottom:24px}
-.chips{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:28px}
-.chip{background:rgba(255,255,255,.1);border:1px solid var(--line);padding:8px 15px;border-radius:999px;font-size:14px;font-weight:500}.chip.acc{background:var(--acc);color:#16120a;border-color:transparent;font-weight:700}
-.row-btn{display:flex;flex-wrap:wrap;gap:12px}
-.ribbon{margin-top:20px;display:inline-flex;align-items:center;gap:10px;background:rgba(245,184,65,.12);border:1px solid rgba(245,184,65,.4);padding:10px 16px;border-radius:14px;font-size:15px}.ribbon b{color:var(--acc)}
-.hint{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.85}
-.hint i{width:26px;height:42px;border:2px solid rgba(255,255,255,.6);border-radius:14px;position:relative}
-.hint i::after{content:"";position:absolute;left:50%;top:8px;width:4px;height:8px;margin-left:-2px;border-radius:2px;background:var(--acc);animation:wh 1.6s infinite}
-@keyframes wh{0%{opacity:0}30%{opacity:1}100%{opacity:0;transform:translateY(14px)}}
-.facts{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-top:-30px;position:relative;z-index:3}
-.fact{background:var(--bg2);padding:20px}.fact b{display:block;font-size:22px;font-weight:800;color:var(--acc);line-height:1.15}.fact span{font-size:14px;color:var(--mut)}
-.gallery{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:230px;gap:12px;margin-top:34px}
-.gallery button{border:0;padding:0;border-radius:16px;overflow:hidden;cursor:zoom-in;background:#1a1724}
-.gallery img{width:100%;height:100%;object-fit:cover;transition:transform .6s}.gallery button:hover img{transform:scale(1.06)}
-.gallery .big{grid-column:span 2;grid-row:span 2}
-.more{display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--acc);font-size:18px}
-.lb{position:fixed;inset:0;background:rgba(5,4,8,.95);z-index:100;display:none;align-items:center;justify-content:center;padding:20px}.lb.on{display:flex}
-.lb img{max-height:86vh;max-width:min(94vw,640px);border-radius:14px}
-.lb button{position:absolute;background:rgba(255,255,255,.1);border:1px solid var(--line);color:#fff;width:50px;height:50px;border-radius:50%;font-size:24px;cursor:pointer}
-.lb .x{top:16px;right:16px}.lb .p{left:12px;top:50%}.lb .n{right:12px;top:50%}.lb .c{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);font-size:13px;color:var(--mut)}
-.info{display:grid;grid-template-columns:1.2fr 1fr;gap:22px;margin-top:34px;align-items:start}
-.box{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px}
-.box h3{font-size:14px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);margin-bottom:14px}
-.desc{white-space:pre-wrap;color:#dcd8e6;font-size:16px}
-.pets{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}.pets span{background:rgba(255,255,255,.07);border:1px solid var(--line);padding:7px 13px;border-radius:999px;font-size:14px}
-.loc p{font-size:19px;font-weight:600;margin-bottom:6px}.loc small{color:var(--mut);display:block;margin-bottom:18px}
-.save{background:linear-gradient(180deg,var(--bg),#161124)}
-.compare{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:36px;text-align:left}
-.cbox{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px;position:relative}
-.cbox h3{font-size:14px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin-bottom:16px}
-.cbox.win{background:linear-gradient(160deg,#2a2140,#1b1628);border:1.5px solid var(--acc)}.cbox.win h3{color:var(--acc)}
-.tag{position:absolute;top:-13px;right:20px;background:var(--acc);color:#16120a;font-weight:800;font-size:12px;padding:6px 13px;border-radius:999px}
-.li{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px dashed var(--line);font-size:16px}.li:last-child{border:0}
-.li small{display:block;color:var(--mut);font-size:13px}.li>span:last-child{white-space:nowrap;text-align:right;font-weight:600}
-.li s{color:#8d879c}.free{display:block;color:var(--ok);font-weight:700}
-.big-save{margin:34px auto 0;max-width:780px;background:var(--acc);color:#16120a;border-radius:var(--r);padding:28px 24px;text-align:center}
-.big-save strong{display:block;font-size:clamp(26px,4.5vw,40px);font-weight:800;line-height:1.1;margin:4px 0 6px}
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:36px;counter-reset:s;text-align:left}
-.step{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:26px;counter-increment:s}
-.step::before{content:counter(s);display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:var(--acc);color:#16120a;font-weight:800;margin-bottom:14px}
-.step b{font-size:18px;display:block;margin-bottom:6px}.step p{color:var(--mut);font-size:15px}
-.req{margin-top:20px;display:flex;flex-wrap:wrap;gap:10px;justify-content:center}.req span{background:rgba(255,255,255,.06);border:1px solid var(--line);padding:9px 16px;border-radius:999px;font-size:14px}
-.next{display:flex;justify-content:center;padding:44px 16px 0}
-.next a{display:inline-flex;align-items:center;gap:12px;padding:12px 20px 12px 14px;border-radius:999px;background:rgba(245,184,65,.1);border:1px solid rgba(245,184,65,.35);font-size:15px;font-weight:600}
-.next b{color:var(--acc)}.next .ar{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--acc);color:#16120a;animation:nd 1.5s infinite}
-@keyframes nd{50%{transform:translateY(4px)}}
-.final{text-align:center;padding:100px 0 120px;background:linear-gradient(180deg,var(--bg),#1b1430)}
-footer{padding:28px 0 110px;text-align:center;color:#7d7890;font-size:13px;border-top:1px solid var(--line)}
-.mbar{display:none}
-.load{min-height:70vh;display:grid;place-items:center;color:var(--mut);text-align:center;padding:40px}
-@media(max-width:900px){section{padding:60px 0}.facts{grid-template-columns:repeat(2,1fr)}.info,.compare,.steps{grid-template-columns:1fr}.gallery{grid-template-columns:repeat(2,1fr);grid-auto-rows:160px}
-.mbar{display:flex;gap:10px;position:fixed;left:0;right:0;bottom:0;z-index:60;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(12,11,16,.92);backdrop-filter:blur(10px);border-top:1px solid var(--line)}.mbar .btn{flex:1;padding:14px 10px;font-size:15px}.hint,.back{display:none}}
-@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+:root{--bg:#0c0b10;--card:#1a1724;--line:rgba(255,255,255,.09);--mut:#b9b5c6;--acc:#F5B841;--vio:#2b1d47;--wa:#25D366}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(120% 60% at 50% 0%,#2a1d45 0%,var(--bg) 60%) fixed,var(--bg);color:#fff;font-family:Poppins,system-ui,sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{width:min(560px,100% - 32px);margin:0 auto;padding:44px 0 60px}
+.top{text-align:center;margin-bottom:26px}
+.logo{width:84px;height:84px;border-radius:24px;background:var(--acc);color:#16120a;display:grid;place-items:center;font-weight:800;font-size:32px;margin:0 auto 16px;box-shadow:0 18px 40px -12px rgba(245,184,65,.55)}
+.top h1{font-size:24px;font-weight:700}
+.top .h{color:var(--mut);font-size:14px;margin-top:2px}
+.promo{margin:22px 0 6px;background:linear-gradient(135deg,var(--acc),#ffd27a);color:#16120a;border-radius:20px;padding:18px 20px;text-align:center;position:relative;overflow:hidden}
+.promo b{display:block;font-size:19px;font-weight:800;line-height:1.25}
+.promo span{font-size:14px;font-weight:500}
+.count{color:var(--mut);font-size:13px;text-align:center;margin:20px 0 12px}
+.list{display:grid;gap:14px}
+.item{display:flex;gap:14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:10px;transition:transform .2s,border-color .2s;opacity:0;transform:translateY(14px);animation:in .5s ease forwards}
+.item:hover{transform:translateY(-2px);border-color:rgba(245,184,65,.5)}
+@keyframes in{to{opacity:1;transform:none}}
+.ph{flex:none;width:104px;height:104px;border-radius:14px;object-fit:cover;background:#0f0d16}
+.tx{flex:1;min-width:0}
+.tag{display:inline-block;background:rgba(245,184,65,.15);color:var(--acc);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:999px;margin-bottom:5px}
+.tx h2{font-size:17px;font-weight:700;line-height:1.2}
+.tx .d{color:var(--mut);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tx .v{color:var(--acc);font-weight:700;font-size:14px;margin-top:3px}
+.go{flex:none;align-self:stretch;display:flex;align-items:center;justify-content:center;padding:0 14px;border-radius:14px;background:var(--acc);color:#16120a;font-weight:700;font-size:14px;white-space:nowrap}
+.empty{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:30px;text-align:center;color:var(--mut)}
+.links{display:grid;gap:10px;margin-top:26px}
+.lk{display:flex;align-items:center;justify-content:center;gap:10px;padding:15px;border-radius:16px;font-weight:600;border:1px solid var(--line);background:rgba(255,255,255,.05)}
+.lk.wa{background:var(--wa);color:#05290f;border:0}
+.lk svg{width:20px;height:20px}
+.foot{text-align:center;color:#7d7890;font-size:12px;margin-top:26px}
+.sk{height:124px;border-radius:20px;background:linear-gradient(90deg,#1a1724,#241f33,#1a1724);background-size:200% 100%;animation:sk 1.2s infinite}
+@keyframes sk{to{background-position:-200% 0}}
+@media(max-width:400px){.ph{width:84px;height:84px}.go{padding:0 11px;font-size:13px}.tx h2{font-size:15px}}
 </style>
 <script>
 !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-fbq('init','1560475887837172');fbq('track','PageView');
+fbq('init','1560475887837172');fbq('track','PageView');fbq('track','ViewContent',{content_name:'Deptos en promo'});
 </script>
 </head>
 <body>
-<div class="prog" id="prog"></div>
-<nav class="nav"><div class="wrap"><a class="brand" href="promos.html"><i>AT</i><span>Alquilar Temporario</span></a><a class="back" href="promos.html">← Ver todos los deptos en promo</a><a class="btn btn-wa wa-v" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><use href="#wa"/></svg>Consultar</a></div></nav>
-<svg width="0" height="0" style="position:absolute"><symbol id="wa" viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.5 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.4-.7-2.9-1.1-4.7-4-4.8-4.2-.1-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.3 0 .5l-.3.5-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2 1.3 2.3 1.4.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 .9c.3.1.5.2.5.3.1.2.1.7-.1 1.2z"/></symbol></svg>
-<main id="app"><div class="load">Cargando departamento…</div></main>
-<div class="lb" id="lb"><button class="x" aria-label="Cerrar">×</button><button class="p" aria-label="Anterior">‹</button><img alt=""><button class="n" aria-label="Siguiente">›</button><div class="c"></div></div>
-<div class="mbar"><a class="btn btn-wa wa-v" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><use href="#wa"/></svg>Visitar</a><a class="btn btn-acc wa-r" target="_blank" rel="noopener">Reservar</a></div>
+<div class="wrap">
+  <div class="top">
+    <div class="logo">AT</div>
+    <h1>Alquilar Temporario</h1>
+    <div class="h">@alquilar.temporario · Deptos amoblados en Buenos Aires</div>
+    <div class="promo"><b>🔥 Deptos en promo</b><span>Mudate sin complicaciones y sin pagar de más</span></div>
+  </div>
+  <div class="count" id="count">Cargando departamentos…</div>
+  <div class="list" id="list"><div class="sk"></div><div class="sk"></div><div class="sk"></div></div>
+  <div class="links">
+    <a class="lk wa" id="waGen" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.5 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.4-.7-2.9-1.1-4.7-4-4.8-4.2-.1-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.3 0 .5l-.3.5-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2 1.3 2.3 1.4.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 .9c.3.1.5.2.5.3.1.2.1.7-.1 1.2z"/></svg>Consultar por WhatsApp</a>
+    <a class="lk" href="https://www.instagram.com/alquilar.temporario/" target="_blank" rel="noopener">📸 Instagram @alquilar.temporario</a>
+  </div>
+  <div class="foot">Promo sujeta a disponibilidad · Contratos de 3 a 12 meses</div>
+</div>
 <script>
-/* ====== CONFIGURACIÓN ====== */
 const CSV_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vQ2E7ECUfY-ps4Ok0_1TJxTR1UPoYl-_ZYkGNlvhk9eZWHBslhsWtoCiTaPfCjQJ38kojq9pJBeoGep/pub?output=csv";
-const WA_GENERAL="5491168686694";
-const ARMADO_CONTRATO="USD 400"; // si la planilla tiene una columna "Armado", se usa ese valor
-/* =========================== */
+const WA="5491168686694";
+const PAGINA_DETALLE="promo.html";
+document.getElementById('waGen').href="https://wa.me/"+WA+"?text="+encodeURIComponent("¡Hola! Vi los deptos en promo. ¿Me pasás más info?");
+document.getElementById('waGen').onclick=function(){if(window.fbq)fbq('track','Contact',{content_name:'Promos general'})};
 function cel(r,n){const k=Object.keys(r).find(k=>k.trim().toLowerCase()===n.toLowerCase());return k?String(r[k]||"").trim():""}
 function esSi(v){return ["si","sí","yes","true","1","x"].includes(String(v).trim().toLowerCase())}
+function foto(r){for(const c of ["Fotos","Fotos2","Fotos3"]){const u=(cel(r,c).match(/https?:\/\/[^\s\])"',]+/)||[])[0];if(u){const m=u.match(/[?&]id=([\w-]+)/)||u.match(/\/d\/([\w-]+)/);return m?"https://drive.google.com/thumbnail?id="+m[1]+"&sz=w400":u}}return ""}
+function tc(v){return String(v||"").toLowerCase().replace(/(^|\s)\S/g,m=>m.toUpperCase())}
+function amb(v){const m=String(v).match(/\d+/);return m?(m[0]==="1"?"1 ambiente":m[0]+" ambientes"):"Departamento"}
 function slug(v){return String(v||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"")}
 function esc(v){return String(v||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function fotos(r){const out=[];["Fotos","Fotos2","Fotos3"].forEach(c=>{(cel(r,c).match(/https?:\/\/[^\s\])"',]+/g)||[]).forEach(u=>{const m=u.match(/[?&]id=([\w-]+)/)||u.match(/\/file\/d\/([\w-]+)/)||u.match(/\/d\/([\w-]+)/);const f=m?"https://drive.google.com/thumbnail?id="+m[1]+"&sz=w1600":u;if(!out.includes(f))out.push(f)})});return out}
-function amb(v){const m=String(v).match(/\d+/);return m?(m[0]==="1"?"1 ambiente":m[0]+" ambientes"):""}
-const slugBuscado=new URLSearchParams(location.search).get("d")||"";
 Papa.parse(CSV_URL,{download:true,header:true,skipEmptyLines:true,complete:function(res){
-  const rows=res.data.filter(r=>cel(r,"Dirección"));
-  const r=rows.find(x=>slug(cel(x,"Dirección"))===slugBuscado);
-  if(!r){document.getElementById('app').innerHTML='<div class="load"><div><h2>No encontramos ese departamento</h2><p class="lead" style="margin:0 auto 24px">Puede que ya se haya alquilado.</p><a class="btn btn-acc" href="promos.html">Ver deptos en promo</a></div></div>';return}
-  render(r);
-},error:function(){document.getElementById('app').innerHTML='<div class="load">No se pudo cargar el departamento. Probá de nuevo en un momento.</div>'}});
-
-function render(r){
-  const dir=cel(r,"Dirección"),barrio=cel(r,"barrio")||"Buenos Aires",ambT=amb(cel(r,"Ambientes")),valor=cel(r,"Valor:"),incl=cel(r,"Incluye");
-  const desc=cel(r,"descripcion")||cel(r,"descripción")||incl;const promo=esSi(cel(r,"PROMO"));
-  const arm=cel(r,"Armado")||ARMADO_CONTRATO;const tel=(cel(r,"Vendedor").replace(/\D/g,""))||WA_GENERAL;const F=fotos(r);
-  const perro=esSi(cel(r,"perro?")),gato=esSi(cel(r,"gato?"));
-  document.title=(ambT||"Depto")+" en "+barrio+" · "+dir+" | Alquilar Temporario";
-  const wa=m=>"https://wa.me/"+tel+"?text="+encodeURIComponent(m);
-  const wv=wa("¡Hola! Vi el depto de "+dir+" ("+barrio+") con la promo de solo el armado del contrato. ¿Puedo coordinar una visita?");
-  const wr=wa("¡Hola! Quiero reservar el depto de "+dir+" ("+barrio+") con la promo de solo el armado del contrato. ¿Qué necesito?");
-  const ico='<svg viewBox="0 0 24 24" fill="currentColor"><use href="#wa"/></svg>';
-  const maps="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(dir+", "+barrio+", Buenos Aires");
-  const gal=F.slice(0,7).map((f,i)=>'<button data-i="'+i+'" class="'+(i===0?'big':'')+'"><img loading="lazy" src="'+esc(f)+'" alt="Foto '+(i+1)+'"></button>').join("")+(F.length>7?'<button data-i="7" class="more">+'+(F.length-7)+' fotos</button>':'');
-  document.getElementById('app').innerHTML=`
-<header class="hero"><div class="hero-bg" style="background-image:url('${esc(F[0]||"")}')"></div><div class="wrap">
-<span class="pill"><i></i>Alquiler temporario · ${esc(barrio)}</span>
-<h1>Tu depto en ${esc(barrio)}, <span>listo para entrar.</span></h1>
-<p class="sub">${esc(ambT?ambT+" amoblado y equipado":"Departamento amoblado y equipado")} en ${esc(dir)}.</p>
-<div class="chips">${promo?'<span class="chip acc">Promo de ingreso</span>':''}${ambT?'<span class="chip">'+esc(ambT)+'</span>':''}<span class="chip">📍 ${esc(dir)}</span>${valor?'<span class="chip">'+esc(valor)+'</span>':''}</div>
-<div class="row-btn"><a class="btn btn-wa" href="${wv}" target="_blank" rel="noopener">${ico}Coordinar visita</a><a class="btn btn-ghost" href="#fotos">Ver fotos</a></div>
-<div class="ribbon">🔥 Para entrar <b>&nbsp;solo pagás el armado del contrato</b></div>
-</div></header>
-<div class="wrap"><div class="facts">
-<div class="fact"><b>${esc(ambT||"Amoblado")}</b><span>${esc(barrio)}</span></div>
-<div class="fact"><b>${esc(valor||"Consultar")}</b><span>valor</span></div>
-<div class="fact"><b>${esc(arm)}</b><span>armado de contrato</span></div>
-<div class="fact"><b>3 a 12</b><span>meses de contrato</span></div></div></div>
-<section id="fotos"><div class="wrap"><div class="center"><span class="kicker">El departamento</span><h2>Conocelo <em>por dentro.</em></h2><p class="lead">Tocá cada foto para verla grande.</p></div>
-<div class="gallery" id="gal">${gal||'<p class="lead center" style="grid-column:1/-1">Pedinos las fotos por WhatsApp.</p>'}</div>
-<div class="info"><div class="box"><h3>Lo que tenés que saber</h3><div class="desc">${esc(desc||"Escribinos y te contamos todos los detalles.")}</div>${(perro||gato)?'<div class="pets">'+(perro?'<span>🐶 Acepta perro</span>':'')+(gato?'<span>🐱 Acepta gato</span>':'')+'</div>':''}</div>
-<div class="box loc"><h3>Ubicación</h3><p>📍 ${esc(dir)}</p><small>${esc(barrio)}, Buenos Aires</small><a class="btn btn-ghost" href="${maps}" target="_blank" rel="noopener">Abrir en Google Maps</a><div style="height:12px"></div><a class="btn btn-wa" href="${wv}" target="_blank" rel="noopener">${ico}Quiero verlo</a></div></div>
-</div><div class="next"><a href="#ahorro"><span class="ar">↓</span><span>Ahora lo mejor: <b>cuánto te ahorrás al entrar</b></span></a></div></section>
-<section class="save" id="ahorro"><div class="wrap center"><span class="kicker">Beneficio de ingreso</span><h2>Y entrar te cuesta <em>menos.</em></h2>
-<p class="lead">Normalmente, al firmar se paga un mes de gastos administrativos, de contrato y comisión inmobiliaria. En este departamento <b>solo se paga el armado del contrato: ${esc(arm)}</b>.</p>
-<div class="compare"><div class="cbox"><h3>Ingreso habitual</h3>
-<div class="li"><span>Primer mes por adelantado</span><span>1 mes</span></div>
-<div class="li"><span>Depósito en garantía<small>Se devuelve al finalizar</small></span><span>1 mes</span></div>
-<div class="li"><span>Gastos administrativos, de contrato y comisión inmobiliaria</span><span>1 mes</span></div></div>
-<div class="cbox win"><span class="tag">PROMO</span><h3>En este depto</h3>
-<div class="li"><span>Primer mes por adelantado</span><span>1 mes</span></div>
-<div class="li"><span>Depósito en garantía<small>Se devuelve al finalizar</small></span><span>1 mes</span></div>
-<div class="li"><span>Gastos administrativos, de contrato y comisión inmobiliaria</span><span><s>1 mes</s><span class="free">No se pagan</span></span></div>
-<div class="li"><span>Armado del contrato<small>Es lo único que se paga</small></span><span>${esc(arm)}</span></div></div></div>
-<div class="big-save"><p>No pagás el mes de gastos administrativos, de contrato y comisión inmobiliaria</p><strong>Solo pagás el armado del contrato</strong><p>para disfrutar la ciudad, una escapada o cualquier necesidad.</p></div>
-<div style="margin-top:30px"><a class="btn btn-acc" href="${wr}" target="_blank" rel="noopener">Quiero reservarlo</a></div></div>
-<div class="next"><a href="#reservar"><span class="ar">↓</span><span>Seguí bajando: <b>cómo reservarlo en 3 pasos</b></span></a></div></section>
-<section id="reservar" style="padding-top:40px"><div class="wrap center"><span class="kicker">Cómo reservar</span><h2>En 3 pasos <em>ya es tuyo.</em></h2>
-<div class="steps"><div class="step"><b>Escribinos por WhatsApp</b><p>Contanos desde cuándo y por cuánto tiempo lo necesitás.</p></div><div class="step"><b>Visitalo</b><p>Coordinamos día y hora para que lo veas. Si estás fuera del país, te mandamos fotos y video.</p></div><div class="step"><b>Reservá y entrá</b><p>Firmás el contrato, abonás el ingreso y te damos las llaves.</p></div></div>
-<div class="req"><span>📄 DNI o pasaporte</span><span>💼 Comprobante de ingresos</span><span>🎓 Constancia de estudios (estudiantes)</span></div></div>
-<div class="next"><a href="#final"><span class="ar">↓</span><span>Último paso: <b>reservalo hoy</b></span></a></div></section>
-<section class="final" id="final"><div class="wrap"><span class="kicker">${esc(dir)} · ${esc(barrio)}</span><h2>La promo vale <em>hasta que se alquile.</em></h2><p class="lead" style="margin:0 auto 30px">Escribinos y coordinamos para que lo conozcas.</p>
-<div class="row-btn" style="justify-content:center"><a class="btn btn-wa" href="${wv}" target="_blank" rel="noopener">${ico}Coordinar visita</a><a class="btn btn-acc" href="${wr}" target="_blank" rel="noopener">Reservarlo</a></div>
-<p style="margin-top:26px"><a href="promos.html" style="color:var(--acc);font-weight:600">← Ver otros deptos en promo</a></p></div></section>
-<footer><div class="wrap">Alquilar Temporario · @alquilar.temporario · Promo sujeta a disponibilidad</div></footer>`;
-  document.querySelectorAll('.wa-v').forEach(a=>a.href=wv);document.querySelectorAll('.wa-r').forEach(a=>a.href=wr);
-  document.querySelectorAll('a[href*="wa.me"]').forEach(a=>a.addEventListener('click',()=>{if(window.fbq)fbq('track','Contact',{content_name:dir})}));
-  if(window.fbq)fbq('track','ViewContent',{content_name:dir,content_category:'Promo'});
-  // lightbox
-  const lb=document.getElementById('lb'),im=lb.querySelector('img'),ct=lb.querySelector('.c');let cur=0;
-  const show=i=>{cur=(i+F.length)%F.length;im.src=F[cur];ct.textContent=(cur+1)+" / "+F.length;lb.classList.add('on')};
-  document.querySelectorAll('#gal button').forEach(b=>b.onclick=()=>show(+b.dataset.i));
-  lb.querySelector('.x').onclick=()=>lb.classList.remove('on');lb.querySelector('.p').onclick=e=>{e.stopPropagation();show(cur-1)};lb.querySelector('.n').onclick=e=>{e.stopPropagation();show(cur+1)};
-  lb.onclick=e=>{if(e.target===lb)lb.classList.remove('on')};
-  document.addEventListener('keydown',e=>{if(!lb.classList.contains('on'))return;if(e.key==='Escape')lb.classList.remove('on');if(e.key==='ArrowLeft')show(cur-1);if(e.key==='ArrowRight')show(cur+1)});
-}
-const pg=document.getElementById('prog');addEventListener('scroll',()=>{const h=document.documentElement,m=h.scrollHeight-h.clientHeight;pg.style.width=(m>0?h.scrollTop/m*100:0)+'%'},{passive:true});
+  const rows=res.data.filter(r=>cel(r,"Dirección")&&esSi(cel(r,"PROMO")));
+  const list=document.getElementById('list');list.innerHTML="";
+  document.getElementById('count').textContent=rows.length?rows.length+(rows.length===1?" departamento en promo":" departamentos en promo"):"";
+  if(!rows.length){list.innerHTML='<div class="empty">Por ahora no hay deptos en promo. Escribinos y te avisamos cuando haya.</div>';return}
+  rows.forEach(function(r,i){
+    const dir=cel(r,"Dirección"),f=foto(r),a=document.createElement('a');
+    a.className="item";a.style.animationDelay=(i*70)+"ms";a.href=PAGINA_DETALLE+"?d="+encodeURIComponent(slug(dir));
+    a.innerHTML=(f?'<img class="ph" loading="lazy" src="'+esc(f)+'" alt="'+esc(dir)+'" onerror="this.style.visibility=\'hidden\'">':'<div class="ph"></div>')+
+      '<div class="tx"><span class="tag">'+esc(tc(cel(r,"barrio"))||"Promo")+'</span><h2>'+esc(amb(cel(r,"Ambientes")))+'</h2><div class="d">📍 '+esc(dir)+'</div>'+(cel(r,"Valor:")?'<div class="v">'+esc(cel(r,"Valor:"))+'</div>':'')+'</div><span class="go">Ver más →</span>';
+    a.onclick=function(){if(window.fbq)fbq('trackCustom','VerPromo',{content_name:dir})};
+    list.appendChild(a);
+  });
+},error:function(){document.getElementById('count').textContent="No se pudieron cargar los departamentos.";document.getElementById('list').innerHTML=""}});
 </script>
 </body>
 </html>
