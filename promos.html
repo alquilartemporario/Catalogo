@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Deptos en promo | Alquilar Temporario</title>
-<meta name="description" content="Departamentos amoblados en Buenos Aires con promo: entrás pagando solo el armado del contrato.">
+<meta name="description" content="Departamentos amoblados en Buenos Aires con promo: mudate sin complicaciones y sin pagar de más.">
 <meta name="theme-color" content="#0c0b10">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -54,13 +54,12 @@ fbq('init','1560475887837172');fbq('track','PageView');fbq('track','ViewContent'
     <div class="logo">AT</div>
     <h1>Alquilar Temporario</h1>
     <div class="h">@alquilar.temporario · Deptos amoblados en Buenos Aires</div>
-    <div class="promo"><b>🔥 Deptos en promo</b><span>Entrás pagando solo el armado del contrato</span></div>
+    <div class="promo"><b>🔥 Deptos en promo</b><span>Mudate sin complicaciones y sin pagar de más</span></div>
   </div>
   <div class="count" id="count">Cargando departamentos…</div>
   <div class="list" id="list"><div class="sk"></div><div class="sk"></div><div class="sk"></div></div>
   <div class="links">
     <a class="lk wa" id="waGen" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.5 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.4-.7-2.9-1.1-4.7-4-4.8-4.2-.1-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.3 0 .5l-.3.5-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2 1.3 2.3 1.4.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 .9c.3.1.5.2.5.3.1.2.1.7-.1 1.2z"/></svg>Consultar por WhatsApp</a>
-    <a class="lk" href="https://alquilartemporario.github.io/Catalogo/DepartamentosAmoblados.html" target="_blank" rel="noopener">🏠 Ver todos los departamentos</a>
     <a class="lk" href="https://www.instagram.com/alquilar.temporario/" target="_blank" rel="noopener">📸 Instagram @alquilar.temporario</a>
   </div>
   <div class="foot">Promo sujeta a disponibilidad · Contratos de 3 a 12 meses</div>
@@ -74,6 +73,7 @@ document.getElementById('waGen').onclick=function(){if(window.fbq)fbq('track','C
 function cel(r,n){const k=Object.keys(r).find(k=>k.trim().toLowerCase()===n.toLowerCase());return k?String(r[k]||"").trim():""}
 function esSi(v){return ["si","sí","yes","true","1","x"].includes(String(v).trim().toLowerCase())}
 function foto(r){for(const c of ["Fotos","Fotos2","Fotos3"]){const u=(cel(r,c).match(/https?:\/\/[^\s\])"',]+/)||[])[0];if(u){const m=u.match(/[?&]id=([\w-]+)/)||u.match(/\/d\/([\w-]+)/);return m?"https://drive.google.com/thumbnail?id="+m[1]+"&sz=w400":u}}return ""}
+function tc(v){return String(v||"").toLowerCase().replace(/(^|\s)\S/g,m=>m.toUpperCase())}
 function amb(v){const m=String(v).match(/\d+/);return m?(m[0]==="1"?"1 ambiente":m[0]+" ambientes"):"Departamento"}
 function slug(v){return String(v||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"")}
 function esc(v){return String(v||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
@@ -86,7 +86,7 @@ Papa.parse(CSV_URL,{download:true,header:true,skipEmptyLines:true,complete:funct
     const dir=cel(r,"Dirección"),f=foto(r),a=document.createElement('a');
     a.className="item";a.style.animationDelay=(i*70)+"ms";a.href=PAGINA_DETALLE+"?d="+encodeURIComponent(slug(dir));
     a.innerHTML=(f?'<img class="ph" loading="lazy" src="'+esc(f)+'" alt="'+esc(dir)+'" onerror="this.style.visibility=\'hidden\'">':'<div class="ph"></div>')+
-      '<div class="tx"><span class="tag">'+esc(cel(r,"barrio")||"Promo")+'</span><h2>'+esc(amb(cel(r,"Ambientes")))+'</h2><div class="d">📍 '+esc(dir)+'</div>'+(cel(r,"Valor:")?'<div class="v">'+esc(cel(r,"Valor:"))+'</div>':'')+'</div><span class="go">Ver más →</span>';
+      '<div class="tx"><span class="tag">'+esc(tc(cel(r,"barrio"))||"Promo")+'</span><h2>'+esc(amb(cel(r,"Ambientes")))+'</h2><div class="d">📍 '+esc(dir)+'</div>'+(cel(r,"Valor:")?'<div class="v">'+esc(cel(r,"Valor:"))+'</div>':'')+'</div><span class="go">Ver más →</span>';
     a.onclick=function(){if(window.fbq)fbq('trackCustom','VerPromo',{content_name:dir})};
     list.appendChild(a);
   });
